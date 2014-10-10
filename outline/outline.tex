@@ -1,24 +1,64 @@
 \documentclass{article}
 \begin{document}
-\title{Cloud-based I/O burst buffer:}
+\title{Cloud-based I/O burst buffer}
 \maketitle
 
 \section{Introduction}
 \begin{itemize}
-	\item cloud provides high computational resource, however data sharing throughput shared storage, can be a performance bottleneck in cloud based high performance computing
-	\item 
-	\item we purpose a cloud based burst buffer to burst IO throughput between compute node and shared storage in cloud computation.
-	\item 
+	\item introduce cloud computation and show the problem in data sharing through shared storage.
+	\item compare supercomputer application execution time with cloud execution time, show how bad it is for data sensitive application.
+	\item purpose a cloud based burst buffer to burst IO throughput between compute node and shared storage in cloud computation.
 \end{itemize}
 
 \section{Background}
+\subsection{a overview of cloud computation}
+introduce common cloud architecture, consist of compute node and shared storage, and shared storage system is globally distributed and connected via Internet causing low throughput.
+\subsection{a general view of burst buffer}
+\subsection{introduction of some data sensitive applications}
+	\begin{itemize}
+		\item montage
+		\item supernoveas
+		\item povray etc.
+	\end{itemize}
+\subsection{introduction of AWS (experiment environment)}
 
 \section{Architecture}
+\subsection{a overview of cloud based IO burstbuffer}
+\subsection{two IO patterns (just like SWoPP paper)}
 
 \section{Implementation}
+\subsection{a overview of implementation}
+\begin{itemize}
+	\item a master manages all IOnodes info and maintain a namespace and file metadata, handle operation like IOnode addtion and deletion
+	\item several IOnodes response to actually store data.
+	\item a client connect with master to get file meta info and connnect to IOnodes to transfer data
+\end{itemize}
+
+\subsection{master}
+function:
+
+	\begin{itemize}
+		\item manage IOnodes including addtion, deletion.
+		\item mangee data layout, including load balance, and data rebalance when IOnodes addtion and deletion.
+		\item maintain namespace of buffered data.
+		\item interact with client
+	\end{itemize}
+
+\subsection{IOnode}
+function:
+
+\begin{itemize}
+	\item buffer client output data.
+	\item read data from storage.
+\end{itemize}
 
 \section{Evaluation}
-
+\subsection{Evaluation of Implementation}
+evaluation result published in SWoPP and first implementation evaluation result showed at meeting with amazon people.
+\subsection{Data Locality Evaluation}
+montage etc. data locality results
+\subsection{Queuing model}
+		
 \section{Related Work}
 
 \section{Conclusion}
