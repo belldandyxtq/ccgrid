@@ -1,3 +1,9 @@
 %to do 
+In order to evaluate our architecture in a real environment and compare with current architecture, we implemented a prototype. 
+The architecture of our prototype is described as follow:
 
-section IV: implementation
+\begin{itemize}
+	\item A master node manages all IOnodes infomation including ip address, total avaliable memory, current avaliable memory etc., and maintains a set of buffered file metadata including file path, file size, and block infomation, master node also handle operation like IOnode addtion and dletetion etc. by using IOnode infomation and file metadata.
+	\item There are several IOnodes response for actually storing data.
+	\item In each client machine, 
+\end{itemize}
