@@ -1,9 +1,40 @@
-%to do 
-In order to evaluate our architecture in a real environment and compare with current architecture, we implemented a prototype. 
-The architecture of our prototype is described as follow:
+%working on this section
+\begin{figure}
+%\includegraphics{}
+\caption{overview of prototype}
+\label{overview of prototype}
+\end{figure}
 
+In order to evaluate our architecture in a real environment and compare with current architecture, we implemented a prototype. 
+In our architecture there are several global data such as total number of burst buffer nodes,
+buffered file information. need to be shared between all nodes.
+And since in our proposal architecture, numbers of burst buffer nodes can be dynamically determined,
+a global scheduler is needed to decide when and how nodes are added and removed, these decision should be made based on global work load and local work load.
+Also a scheduler is needed to handle the operation like re-balance of buffered data when nodes addition, and data write back when nodes deletion.
+
+For above reasons in this implementation, we adopted master-worker model, a master is designed to store global information and interactive with client daemon, as well as serve as a scheduler.
+First we introduce our target environment:
 \begin{itemize}
-	\item A master node manages all IOnodes infomation including ip address, total avaliable memory, current avaliable memory etc., and maintains a set of buffered file metadata including file path, file size, and block infomation, master node also handle operation like IOnode addtion and dletetion etc. by using IOnode infomation and file metadata.
-	\item There are several IOnodes response for actually storing data.
-	\item In each client machine, 
+  \item a common cloud environment, several types of instance are available for using.
+  \item all nodes are connected via interconnection network, which is about 1Gb/s or larger, and has a strong scaleab
+  \item a shared storage 
 \end{itemize}
+The architecture of our prototype is described as Figure \ref{overview of prototype}
+
+In our architecture, there are three types of nodes:
+\begin{itemize}
+	\item A master node manages all IOnodes information, maintains a set of buffered file meta data, handles operation like IOnode addition and deletion etc., and interact with clients.
+	\item There are several IOnodes response for actually storing data.
+	\item A daemon runs on each client machine serving for communication with
+	master and IOnodes, in order to hide architecture detail from user.
+\end{itemize}
+
+Details of each nodes will be shown in following subsections:
+
+\subsection{Master Node}
+In our master-IOnode model, master node is the supervisor of the entire system,
+Master node is in charge of interactive with client, including file opening, reading and writing.
+ 
+\subsection{I/O Node}
+
+\subsection{Client Daemon}
