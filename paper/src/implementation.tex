@@ -1,5 +1,6 @@
 %working on this section
 \begin{figure}
+\centering
 %\includegraphics{}
 \caption{overview of prototype}
 \label{overview of prototype}
@@ -34,7 +35,30 @@ Details of each nodes will be shown in following subsections:
 \subsection{Master Node}
 In our master-IOnode model, master node is the supervisor of the entire system,
 Master node is in charge of interactive with client, including file opening, reading and writing.
- 
+
+In order to manage the whole system and schedule events like node addition and deletion, master node store following data structure:
+
+\begin{table}
+\centering
+\begin{tabluar}{c|c}
+\hline
+I\textbackslash O Node Pool &&
+storing registered I\backslash O node information including node id, ip address, available memory, total memory, communication socket\\\hline
+buffered file information &&
+including file id, size, block size, dirty flag\\\hline
+\end{tabluar}
+\caption{}
+\end{table}
+
+Master functionality:
+
+\begin{table}
+\centering
+\begin{tabluar}{c|c}
+\hline
+handle file open operation && if file is buffered, return set of I\textbackslash Onode, else get file size, assigned appropriate number of nodes depends on data layout si
+\end{tabluar}
+\end{table}
 \subsection{I/O Node}
 
 \subsection{Client Daemon}
