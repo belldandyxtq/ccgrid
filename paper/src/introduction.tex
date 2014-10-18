@@ -1,2 +1,31 @@
-%to do
-section I: introduction
+\section{Introduction}
+\label{sec:introduction}
+\xtq{writing}
+A growing focus on cloud computing for its high scalability as well as high computational resources and fast setup, 
+Such cloud environment is suitable for large scale computation, for example, Amazon provided a high performance computing instance allows user to run complex science, engineering, and business applications on these instances with a high bandwidth low latency network, and high compute capablilies.
+However, such applications often require high I/O throughput and data sharing between different nodes, different workflow and even different jobs.
+In such cases, applications require not only high bandwidth network as well as a high throughput shared storage in order to share data between different workflow or difference jobs.
+Applications like\xtq{applications like montage povray} generate \xtq{file size } intermediate file to shared between different nodes in different workflow.
+Such applications are now running majorly on high performance computing system like supercomputers, with a GB/s level shared storage as well as high interconnection network.
+
+However if we attempt to run such applications on public cloud, currently we can not get acceptable performance, since the lack of a shared storage system with a required throughput.
+For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon Simple Storage Service}(Amazon S3), but compared with the throughput of shared storage system in high performance computing system,
+Amazon S3 can only achieve a extremely low throughput, \xtq{figure}as well as a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
+Also it is difficult to build each compute center a reasonable size data center, since it can not achieve a high utilization of storage system.
+
+In order to solve such problem, we propose a cloud based burst buffer system. our proposal system take advantage of high throughput, low latency interconnection network inside cloud environment,
+make some of compute nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
+
+Our contributions can be summarized as following:
+\begin{itemize}
+	\item A cloud based I/O burst buffer system for increasing data transfer throughput in cloud environment;
+	\item An evaluation of prototype of I/O burst buffer system in Amazon EC2;
+    \item \xtq{queue model?}
+\end{itemize}
+%2
+The rest of this paper is organized as follows. 
+In Section \ref{sec:motivation}, we clarify the motivation and the background.
+We introduce an overview of the I/O bursting buffer architecture in Section \ref{sec:architecture}, 
+and describe the detail about the first prototype implementation of our proposal architecture in order to evaluate its performance in a real environment \ref{sec:implementation}. 
+In Section \ref{sec:evaluation}, we present our experimental results based of our performance models. %based on data obtained from several benchmark on TSUBAME V queue and Amazon EC2 
+Finally, we show some related work in Section \ref{sec:related work}, and conclusion in Section \ref{sec:conclusion}.

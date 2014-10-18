@@ -1,6 +1,10 @@
 \documentclass[10pt, conference, compsocconf]{IEEEtran}
+\usepackage{color}
+\usepackage{supertabular}
+
 \begin{document}
 
+\newcommand {\xtq}[1]{{[XTQ : #1]}}
 %start title
 \title{Dummy title}
 
@@ -40,31 +44,24 @@
 \IEEEpeerreviewmaketitle
 
 %section I
-\section{Introduction}
 \input{src/introduction.tex}
 
 %section II
-\section{Background}
 \input{src/background.tex}
 
 %section III
-\section{Architecture}
 \input{src/architecture.tex}
 
 %section IV
-\section{Implementation}
 \input{src/implementation.tex}
 
 %section V
-\section{Evaluation}
 \input{src/evaluation.tex}
 
 %section VI
-\section{Related Work}
 \input{src/related_work.tex}
 
 %section VII
-\section{Conclusion}
 \input{src/conclusion.tex}
 
 \bibliography{src/bib/reference.bib}
