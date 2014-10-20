@@ -1,8 +1,28 @@
 %to do
 \section{evaluation}
 \label{sec:evaluation}
+\begin{figure}
+\centering
+%\includegraphics{}
+\caption{Data Locality}
+\label{evaluation:data locality}
+\end{figure}
+
+\begin{figure}
+\centering
+%\includegraphics{}
+\caption{One User Performance}
+\label{evaluation:one user}
+\end{figure}
+
+\begin{figure}
+\centering
+\caption{multi user}
+\label{evaluation:multi user}
+\end{figure}
+
 In this section we introduce the evaluation result of our prototype implementation in Amazon EC2 public cloud.
-The environment is shown as \tableref{evaluation:environment}
+The environment is shown as Table.\ref{evaluation:environment}
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|}
@@ -22,7 +42,24 @@ here vCPUs means the number of virtual CPU in instance, and one ECU provides the
 and the applications used are shown as below:
 \begin{table}
 \centering
-\begin{tabular}{|c|c|}
-montage
+\begin{tabular}{|c|}
+montage\\
+pov ray\\
+supernovae\xtq{not exact}
 \end{tabular}
 \end{table}
+
+\subsection{Data Locality}
+Since applications I/O pattern will affect the performance gains by using our propose architecture
+greatly, We measure the I/O pattern for the applications mentioned above.
+Here we assume that all I/O data can be buffered in a single I/O node, otherwise data locality will
+be affected by architecture data layout and master I/O node assignment strategy.
+We count the duplicated read at the same position and all write as data locality size, since all
+these cases data can be read from or write to buffer.
+Figure~.\ref{evaluation:data locality} shows the results of these three applications. we can see
+that
+
+\subsection{One User Performance}
+First we measure the performance of our implementation for only one user.
+we test
+Figure~.\ref{evaluation:one user}
