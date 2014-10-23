@@ -39,6 +39,7 @@ Network Performance	&		High		\\
 \end{table}
 
 here vCPUs means the number of virtual CPU in instance, and one ECU provides the equivalent CPU capacity of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor.
+In the following experiment, we 
 and the applications used are shown as below:
 \begin{table}
 \centering
@@ -57,9 +58,14 @@ be affected by architecture data layout and master I/O node assignment strategy.
 We count the duplicated read at the same position and all write as data locality size, since all
 these cases data can be read from or write to buffer.
 Figure~.\ref{evaluation:data locality} shows the results of these three applications. we can see
-that
+that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
+are over 90\% and supernovae achieved over 80\%.
+The reason is that these applications are work flow application, the whole job consists of several
+sub jobs, the output of previous job can be the input of subsequent job, also some job will access
+the same input file.
+So if we buffer the output data and input data, the subsequent job can access the data via LAN.
 
 \subsection{One User Performance}
 First we measure the performance of our implementation for only one user.
-we test
-Figure~.\ref{evaluation:one user}
+In this experiment, fix the number of client to one, and measure the performance for different
+number of I/O nodes. Figure~.\ref{evaluation:one user}

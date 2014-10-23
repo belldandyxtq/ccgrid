@@ -1,26 +1,51 @@
 \section{Introduction}
 \label{sec:introduction}
-\xtq{writing}
-A growing focus on cloud computing for its high scalability as well as high computational resources and fast setup, 
-Such cloud environment is suitable for large scale computation, for example, Amazon provided a high performance computing instance allows user to run complex science, engineering, and business applications on these instances with a high bandwidth low latency network, and high compute capablilies.
-However, such applications often require high I/O throughput and data sharing between different nodes, different workflow and even different jobs.
-In such cases, applications require not only high bandwidth network as well as a high throughput shared storage in order to share data between different workflow or difference jobs.
-Applications like\xtq{applications like montage povray} generate \xtq{file size } intermediate file to shared between different nodes in different workflow.
-Such applications are now running majorly on high performance computing system like supercomputers, with a GB/s level shared storage as well as high interconnection network.
+A growing focus on cloud computing for its high scalability as well as high computational
+resources, for example, Amazon provided a high performance computing instance allows user to run
+complex science, engineering, and business applications on these instances with a high bandwidth low latency
+network, and high compute capabilities.
+Cloud provide a fast setup, usually cloud instances can set up in a few minutes, this
+make the on-demand usage available.
+Such cloud environment is suitable for large scale
+computation, by using cloud users don't need a large scale supercomputer and only need to pay
+what they run, instead of dealing with expensive hardware ,software and machine maintenance.
 
-However if we attempt to run such applications on public cloud, currently we can not get acceptable performance, since the lack of a shared storage system with a required throughput.
-For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon Simple Storage Service}(Amazon S3), but compared with the throughput of shared storage system in high performance computing system,
-Amazon S3 can only achieve a extremely low throughput, \xtq{figure}as well as a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
+Large scale applications often require high I/O
+throughput and data sharing between different nodes, different work flow and even different jobs.
+In such cases, applications require not only high bandwidth network as well as a high throughput
+shared storage in order to share data between different work flow or difference jobs.
+Applications like Montage Pov Ray generate huge size of intermediate file
+to shared between different nodes in different work flow.
+Such applications are now running majorly on high performance computing system like supercomputers, with a GB/s level shared storage as well as high interconnection network.
+Furthermore, large scale applications require for a large amount of compute node as well as a
+running time from several hours to several days, machine failure is Inevitable and checkpoint will be required to enable
+fast recovery from machine failure\cite{user}, in order to make a timely checkpoint, a fast global
+shared storage is indispensable.
+
+However, In current cloud environment, the global shared storage can not meet the demand.
+For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon
+Simple Storage Service}(Amazon S3), however compared to the throughput of shared storage system in
+high performance computing system, Amazon S3 can only achieve a extremely low throughput, \xtq{figure}as well as has a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
 Also it is difficult to build each compute center a reasonable size data center, since it can not achieve a high utilization of storage system.
 
-In order to solve such problem, we propose a cloud based burst buffer system. our proposal system take advantage of high throughput, low latency interconnection network inside cloud environment,
-make some of compute nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
+In order to solve such problem, we propose a cloud based burst buffer system. Burst buffer system
+has been proposed as a new tier in the storage hierarchy to hide the low bandwidth and high latency
+of the shared file system by allocate several local nodes as a burst buffer nodes to absorb the I/O
+request from applications, our proposal system using such burst buffer system and take advantage of
+high throughput, low latency interconnection network inside cloud environment, make some of compute nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
+Our proposal system not only target on the work flow applications, all the applications have
+I/O data locality or even output a huge size can get speed up on our proposal system.
+We implemented a prototype of our proposal system and evaluated on real public cloud environment, as
+well as simulated with several applications.
+We achieved 8 times speed up on reading as well as 14 times speed up on writing with 8 I/O nodes.
 
 Our contributions can be summarized as following:
 \begin{itemize}
 	\item A cloud based I/O burst buffer system for increasing data transfer throughput in cloud environment;
-	\item An evaluation of prototype of I/O burst buffer system in Amazon EC2;
-    \item \xtq{queue model?}
+	\item A quantitative evaluation of prototype of I/O burst buffer system in Amazon EC2 to show the
+	Effectiveness of our proposal system;
+    \item A simulation with several applications in Amazon EC2 to show how applications can achieve
+    performance burst by using our proposal system;
 \end{itemize}
 %2
 The rest of this paper is organized as follows. 
