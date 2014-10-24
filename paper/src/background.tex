@@ -51,7 +51,9 @@ Previous research\cite{on_the_role_of_burst_buffers} proposed a
 burst buffer system as a new tier of current storage hierarchy.
 Burst buffer system use several local compute nodes as a burst buffer to absorb I/O
 request. 
-Figure~.\ref{background:burst buffer architecture} shows the architecture of burst buffer.
+By adding such new tier of storage hierarchy, temporilal I/O request can be absorb by burst buffer
+without a need of a higher bandwidth storage. Figure~.\ref{background:burst buffer architecture}
+shows the architecture of burst buffer.
 
 Such burst buffer system can burst the application which has a high data locality I/O pattern, since
 the data can be read once from storage and then buffered in the burst buffer system, subsequent
@@ -59,5 +61,4 @@ request for the same data can be accessed from burst buffer.
 Furthermore, applications which write a lot also can benefit from burst buffer system, by buffering
 output data in burst buffer, application can go ahead without waiting data be finally write to
 storage.
-
 
