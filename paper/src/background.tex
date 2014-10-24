@@ -4,7 +4,7 @@
 \subsection{cloud computing}
 \begin{figure}
 \centering
-\includegraphics[width=4cm]{img/cloud_models}
+\includegraphics[width=4cm]{img/cloud_models.pdf}
 \caption{the relationship of different cloud models}
 \label{background:cloud models}
 \end{figure}
@@ -35,10 +35,29 @@ Cloud computing can have following benefits:
 \end{itemize}
 
 \subsection{burst buffer}
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/burst_buffer.pdf}
+\caption{burst buffer architecture}
+\label{background:burst buffer architecture}
+\end{figure}
+
 Modern high performance systems consist of thousands of compute nodes, and hundreds of
-applications are running at the same time, these applications require for around 80GiB/s of
-bandwidth and the demand are expected to have TiB level in the near future.
-Also The shared storage
-systems can easily become the bottleneck of the whole system\xtq{citation},
+applications are running at the same time, some I/O request peak can hardly be meet by current
+storage hierarchy. 
+Traditional approach which solve such problem by providing a higher bandwidth storage will cause
+the storage system underutilization.
+Previous research\cite{on_the_role_of_burst_buffers} proposed a
+burst buffer system as a new tier of current storage hierarchy.
+Burst buffer system use several local compute nodes as a burst buffer to absorb I/O
+request. 
+Figure~.\ref{background:burst buffer architecture} shows the architecture of burst buffer.
+
+Such burst buffer system can burst the application which has a high data locality I/O pattern, since
+the data can be read once from storage and then buffered in the burst buffer system, subsequent
+request for the same data can be accessed from burst buffer.
+Furthermore, applications which write a lot also can benefit from burst buffer system, by buffering
+output data in burst buffer, application can go ahead without waiting data be finally write to
+storage.
 
 
