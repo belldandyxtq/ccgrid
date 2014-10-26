@@ -9,30 +9,35 @@ make the on-demand usage available.
 Such cloud environment is suitable for large scale
 computation, by using cloud users don't need a large scale supercomputer and only need to pay
 what they run, instead of dealing with expensive hardware ,software and machine maintenance.
+These characteristics makes cloud very attractive to large scale applications.
 
 Large scale applications often require high I/O
 throughput and data sharing between different nodes, different work flow and even different jobs.
 In such cases, applications require not only high bandwidth network as well as a high throughput
 shared storage in order to share data between different work flow or difference jobs.
-Applications like Montage Pov Ray generate huge size of intermediate file
-to shared between different nodes in different work flow.
-Such applications are now running majorly on high performance computing system like supercomputers, with a GB/s level shared storage as well as high interconnection network.
+Applications like Montage\cite{montage} Pov Ray\cite{povray} generate huge size of intermediate file
+need to be shared between different nodes in different work flow.
+Such applications are now running majorly on high performance computing system like supercomputers,
+with a GB/s level shared storage as well as high interconnection network.
 Furthermore, large scale applications require for a large amount of compute node as well as a
 running time from several hours to several days, machine failure is Inevitable and checkpoint will be required to enable
-fast recovery from machine failure\cite{checkpointing}, in order to make a timely checkpoint, a fast global
-shared storage is indispensable.
+fast recovery from machine failure\cite{checkpointing}, in order to make a timely checkpoint, a
+fast global shared storage is indispensable.
 
 However, In current cloud environment, the global shared storage can not meet the demand.
 For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon
 Simple Storage Service}(Amazon S3), however compared to the throughput of shared storage system in
-high performance computing system, Amazon S3 can only achieve a extremely low throughput, \xtq{figure}as well as has a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
-Also it is difficult to build each compute center a reasonable size data center, since it can not achieve a high utilization of storage system.
+high performance computing system, Amazon S3 can only achieve a extremely low throughput,
+as well as has a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
+Also it is difficult to build each compute center a reasonable size data center, since it can not
+achieve a high utilization of storage system.
 
 In order to solve such problem, we propose a cloud based burst buffer system. Burst buffer system
 has been proposed as a new tier in the storage hierarchy to hide the low bandwidth and high latency
 of the shared file system by allocate several local nodes as a burst buffer nodes to absorb the I/O
 request from applications, our proposal system using such burst buffer system and take advantage of
-high throughput, low latency interconnection network inside cloud environment, make some of compute nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
+high throughput, low latency interconnection network inside cloud environment, make some of compute
+nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
 Our proposal system not only target on the work flow applications, all the applications have
 I/O data locality or even output a huge size can get speed up on our proposal system.
 We implemented a prototype of our proposal system and evaluated on real public cloud environment, as
@@ -51,6 +56,7 @@ Our contributions can be summarized as following:
 The rest of this paper is organized as follows. 
 In Section \ref{sec:background}, we clarify the motivation and the background.
 We introduce an overview of the I/O bursting buffer architecture in Section \ref{sec:architecture}, 
-and describe the detail about the first prototype implementation of our proposal architecture in order to evaluate its performance in a real environment \ref{sec:implementation}. 
-In Section \ref{sec:evaluation}, we present our experimental results based of our performance models. %based on data obtained from several benchmark on TSUBAME V queue and Amazon EC2 
+and describe the detail about the first prototype implementation of our proposal architecture in
+order to evaluate its performance in a real environment \ref{sec:implementation}.
+In Section \ref{sec:evaluation}, we present our experimental results based of our performance models.
 Finally, we show some related work in Section \ref{sec:related work}, and conclusion in Section \ref{sec:conclusion}.

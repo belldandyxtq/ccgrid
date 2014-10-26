@@ -8,7 +8,8 @@
 
 \newcommand {\xtq}[1] {\begin{color}{red}{[XTQ : #1]}\end{color}}
 %start title
-\title{Dummy title}
+\title{A Design and Prototype of Cloud Based Burst Buffer to Burst Data Intensive Application on the
+Cloud}
 
 
 \author{
@@ -20,7 +21,7 @@
 	belldandyxtq@gmail.com}
 	\and
 	\IEEEauthorblockN{Kento Sato}
-	\IEEEauthorblockA{?\\
+	\IEEEauthorblockA{?\
 		Lawrence Livermore National Laboratory\\
 		Livermore, CA 94551 USA\\
 	?}
@@ -37,8 +38,21 @@
 
 %start abstract
 \begin{abstract}
-	%to do
-	dummy abstract
+Cloud offers high computational resources, strong scalability, as well as easy to access. 
+Such cloud environment offers these who have limited local computational resources a opportunity to
+run large scale applications.
+However compare to the throughput between the compute nodes inside cloud, the shared storage
+system in cloud environment can only achieve a quite low throughput, becoming the critical
+performance bottleneck for data incentive applications.
+Furthermore, according to normal cloud pay-as-you-go pricing, longer execution time means more you
+should pay.
+In this paper, we propose a cloud based burst
+buffer system as a new tier in cloud storage system to absorb I/O request.
+We use several nodes as a burst buffer nodes, take advantage of high throughput inside cloud to
+buffer application I/O data.
+We implemented a prototype of our proposal architecture, evaluated in Amazon EC2/S3(one of the most
+common public cloud today).
+We shows our architecture can achieve a high throughput.
 \end{abstract}
 
 %start key word
