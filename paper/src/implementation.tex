@@ -1,9 +1,9 @@
 \section{Implementation}
 \label{sec:implementation}
-%working on this section
+
 \begin{figure}
 \centering
-%\includegraphics{}
+\includegraphics[width=8cm]{img/prototype_overview}
 \caption{overview of prototype}
 \label{overview of prototype}
 \end{figure}
@@ -58,17 +58,29 @@ thus we have to minimize the master involvement in file operation, client asks m
 then client caches these information and connect to I/O nodes directly for sending or receiving data.
 
 \subsection{File operations}
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/file_operation}
+\caption{Details of File Operation}
+\label{implementation:file operation}
+\end{figure}
+
 In this section we give more details about the file operation in our implementation, including open, read and write.
 
 When a user try to open a file, client first send file path, access mode to master via client daemon, for unbuffered file, master record the file information , and assign a file id,
 and then send the file id to client.
 
 After file opened, client can use file id to send read or write request, in order to monitor the file access and make swap schedule, all the read and write request are first send to master,
-after receive the request, for file opened for reading request\xtq{may use figure or pesdocode},
+after receive the request, for file opened for reading request,
 master get the file size from shared storage, and assign several I/O nodes to this file according to file size.
 As for file opened in only writing since the file need to be create, master get file size from client daemon and assign I/O nodes
 after that master send I/O nodes ip address as well as the map information from chunks to I/O nodes to client daemon, client cache these information.
 
-\subsection{I/O node assignment}
-
-
+\subsection{Limitation}
+\begin{color}{red}
+\begin{itemize}
+  \item one I/O node one data chunk reduce the performance gains by using dirty flag.
+  \item blocking I/O node
+\end{itemize}
+\end{color}

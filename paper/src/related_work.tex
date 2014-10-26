@@ -2,4 +2,24 @@
 \section{related work}
 \label{sec:related work}
 
-section VI:related work
+\subsection{burst buffer}
+Ning Liu\emph{el at.} \cite{on_the_role_of_burst_buffers} proposed a new tier of solid-state burst
+buffers in high performance(HPC) system, 
+
+\subsection{burst communication throughput in cloud bursting}
+Cloud computing is becoming a topic of much interest in recent years, not only famous Internet
+companies like google, Amazon, IBM, Oracle, Microsoft provide public cloud, many companies start to
+build or have built private cloud for internal computation.
+%Several research works have been done on hybrid cloud and cloud bursting, Tekin Bicer \emph{el
+%at.}\cite{time_and_cost} considered a software framework to enable data-intensive computing with
+%cloud bursting, which use a combination of compute resources from local cluster and a public cloud
+%to processing on a geographically distributed data set.
+Their framework assume computation nodes allocated in both local cluster and public cloud, and data
+set is geographically distributed, However in our study, data set is stored in local system and in
+order to obtain a high communication throughput between computation nodes, we assume that nodes
+used for the same job allocated in the same system.
+Another cloud bursting application can be seen in Tian Guo\emph{el at.}\cite{Seagull}, they
+introduced a system called Seagull, designed to facilitate cloud bursting by determining which
+applications should be transitioned into the cloud and automating the movement process at the proper
+time. Their work focused on determine which applications should be moved to public cloud, and our
+work focus on the methodology of filling the I/O throughput in cloud bursting.

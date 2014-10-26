@@ -1,28 +1,23 @@
 %to do
 \section{evaluation}
 \label{sec:evaluation}
-\begin{figure}
-\centering
-%\includegraphics{}
-\caption{Data Locality}
-\label{evaluation:data locality}
-\end{figure}
 
 \begin{figure}
 \centering
-%\includegraphics{}
+\includegraphics[width=8.5cm]{img/one_client.pdf}
 \caption{One User Performance}
 \label{evaluation:one user}
 \end{figure}
 
 \begin{figure}
 \centering
-\caption{multi user}
+\includegraphics[width=8cm]{img/multiple_client.pdf}
+\caption{Multiple User Performance}
 \label{evaluation:multi user}
 \end{figure}
 
 In this section we introduce the evaluation result of our prototype implementation in Amazon EC2 public cloud.
-The environment is shown as Table.\ref{evaluation:environment}
+The cloud environment is shown as Table.\ref{evaluation:environment}
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|}
@@ -37,35 +32,18 @@ Network Performance	&		High		\\
 \caption{evaluation environment}
 \label{evaluation:environment}
 \end{table}
-
 here vCPUs means the number of virtual CPU in instance, and one ECU provides the equivalent CPU capacity of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor.
-In the following experiment, we 
-and the applications used are shown as below:
-\begin{table}
-\centering
-\begin{tabular}{|c|}
-montage\\
-pov ray\\
-supernovae\xtq{not exact}
-\end{tabular}
-\end{table}
-
-\subsection{Data Locality}
-Since applications I/O pattern will affect the performance gains by using our propose architecture
-greatly, We measure the I/O pattern for the applications mentioned above.
-Here we assume that all I/O data can be buffered in a single I/O node, otherwise data locality will
-be affected by architecture data layout and master I/O node assignment strategy.
-We count the duplicated read at the same position and all write as data locality size, since all
-these cases data can be read from or write to buffer.
-Figure~.\ref{evaluation:data locality} shows the results of these three applications. we can see
-that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
-are over 90\% and supernovae achieved over 80\%.
-The reason is that these applications are work flow application, the whole job consists of several
-sub jobs, the output of previous job can be the input of subsequent job, also some job will access
-the same input file.
-So if we buffer the output data and input data, the subsequent job can access the data via LAN.
+For the storage system, we used a machine inside our lab
 
 \subsection{One User Performance}
 First we measure the performance of our implementation for only one user.
-In this experiment, fix the number of client to one, and measure the performance for different
+In this experiment, fix the number of client to one, and measure the performance for different 
 number of I/O nodes. Figure~.\ref{evaluation:one user}
+
+\subsection{Multiple Users Performance}
+Our architecture can burst I/O performance for multiple users
+X: number of client=number of I/O nodes Y:throughput
+
+\subsection{Simulation for applications}
+Show our architecture can burst I/O performance for applications
+x
