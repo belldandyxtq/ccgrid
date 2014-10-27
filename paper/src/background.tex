@@ -60,6 +60,7 @@ When we running the
 benchmark, many other users were also running applications on Amazon, so we can assume that highest
 throughput 1GB/s (8Gbit/s) shown in Figure.~\ref{background:amazon throughput} is not the
 maximum bandwidth of interconnection network in Amazon EC2.
+Our proposal system take advantage of this characteristic to burst I/O throughput.
 
 \subsection{Burst Buffer}
 \begin{figure}
@@ -73,12 +74,12 @@ Modern high performance systems consist of thousands of compute nodes, and hundr
 applications are running at the same time, some I/O request peak can hardly be meet by current
 storage hierarchy. 
 Traditional approach which solve such problem by providing a higher bandwidth storage will cause
-the storage system underutilization.
+the storage system under utilization.
 Previous research\cite{on_the_role_of_burst_buffers} proposed a
 burst buffer system as a new tier of current storage hierarchy.
 Burst buffer system use several local compute nodes as a burst buffer to absorb I/O
 request. 
-By adding such new tier of storage hierarchy, temporilal I/O request can be absorb by burst buffer
+By adding such new tier of storage hierarchy, temporal I/O request can be absorb by burst buffer
 without a need of a higher bandwidth storage. Figure~.\ref{background:burst buffer architecture}
 shows the architecture of burst buffer.
 

@@ -25,13 +25,6 @@ we target at common cloud environment like Amazon EC2, which compute node and da
 
 \begin{figure}[tb]
 	\centering
-	\includegraphics[width=8cm]{img/client_daemon}
-	\caption{Client Daemon}
-	\label{architecture:client_daemon}
-\end{figure}
-
-\begin{figure}[tb]
-	\centering
 	\includegraphics[width=8cm]{img/architecture_overview}
 	\caption{overall illustrate of I/O Burst Buffer Architecture}
 	\label{architecture:overview}
@@ -40,19 +33,5 @@ we target at common cloud environment like Amazon EC2, which compute node and da
 There are two kinds of nodes in our I/O burst buffer architecture: \emph{compute nodes} and \emph{I/O burst nodes}, compute nodes run user's application and I/O burst nodes.
 Public clouds usually provide several type of instance for difference purpose, some are compute optimized(like C3 instances provided by Amazon) provides a high compute performance,
 some are memory optimized (such as R3 instances in Amazon EC2) provide a huge amount of memory(up to 244GB in R3 family), also memory size can be easily expanded by using solid storage driver(SSD) as a swap device, usually such instances have SSD inside.
-
-Fig.~\ref{architecture:client_daemon} is a illustrate of client daemon inside client nodes and
-buffer queue in I/O burst nodes.
-In each compute node, there is a client daemon, which is a file system client used to buffer I/O data, communicate with I/O buffer nodes, including send I/O request and send or receive I/O data.
-
-When a user application issue a write request, I/O data will be buffered in that node by I/O daemon, when user close the file, call flush function or I/O data size exceed I/O server buffer size, I/O server will try to transfer I/O data to buffer queue in I/O burst buffer, if buffer queue in not full, I/O data will be sent to I/O burst buffer via interconnection network and can be seen among computing nodes in the same system after that.
-However if buffer queue is full, I/O server will block user application and wait until buffer queue is ready to receive new I/O data, causing a low I/O throughput.
-
-%When I/O server is notified that buffer queue is ready,first, I/O server sends the size of I/O data to master I/O burst buffer node, master node return a list of several I/O buffer nodes, then I/O server split I/O data into pieces, and sends each pieces to a I/O buffer node, after data transfer finished, that file will be added to buffer queue and namespace, and this file can be seen by all computing nodes, since we assume that all nodes used by the same job are allocated in the same system, so data consistency can be guaranteed since that.
-%Buffer queue operation including data write back and operation when queue is full will be described in following section.
-
-Similarly when user issue a read request, there are two conditions: required file is buffered in buffer queue in I/O burst buffer, or file is stored only in storage in another system.
-In the first cases, file can be transferred to computing nodes from buffer queue directly, and can achieve a high throughput.
-If data is not in buffer queue, then a read operation described below will be executed, since data must be transferred from storage in another system, in this case, throughput will depend on Internet condition and it is hard to achieve a high throughput.
 
 Fig.~\ref{architecture:overview} shows a overall illustrate of I/O burst buffer architecture.

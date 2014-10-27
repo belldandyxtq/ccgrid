@@ -2,24 +2,43 @@
 \section{related work}
 \label{sec:related work}
 
-\subsection{Burst Buffer}
-Ning Liu\emph{el at.} \cite{on_the_role_of_burst_buffers} proposed a new tier of solid-state burst
-buffers in high performance(HPC) system, 
+Burst buffer architecture are used in several previous research, as a new design in storage system
+to fill the gap between compute node throughput and parallel file system throughput.
+Ning Liu el at. \cite{on_the_role_of_burst_buffers} proposed burst buffers in high
+performance(HPC) system to absorb bursty I/O request from applications, they analyzed the I/O
+pattern of several applications, and the workload of the whole system, and propose a SSD based burst
+buffer system to absorb such bursty I/O request instead of traditional approach which increase the
+throughput of the file system and easily cause the under utilization.
+Sato el at.\cite{checkpointing} proposed a burst buffer based checkpoint strategy to enable timely
+checkpoint as well as alleviate the affect to applications.
 
-\subsection{Burst Communication Throughput in Cloud Bursting}
-Cloud computing is becoming a topic of much interest in recent years, not only famous Internet
-companies like google, Amazon, IBM, Oracle, Microsoft provide public cloud, many companies start to
-build or have built private cloud for internal computation.
-%Several research works have been done on hybrid cloud and cloud bursting, Tekin Bicer \emph{el
-%at.}\cite{time_and_cost} considered a software framework to enable data-intensive computing with
-%cloud bursting, which use a combination of compute resources from local cluster and a public cloud
-%to processing on a geographically distributed data set.
-Their framework assume computation nodes allocated in both local cluster and public cloud, and data
-set is geographically distributed, However in our study, data set is stored in local system and in
-order to obtain a high communication throughput between computation nodes, we assume that nodes
-used for the same job allocated in the same system.
-Another cloud bursting application can be seen in Tian Guo\emph{el at.}\cite{Seagull}, they
-introduced a system called Seagull, designed to facilitate cloud bursting by determining which
-applications should be transitioned into the cloud and automating the movement process at the proper
-time. Their work focused on determine which applications should be moved to public cloud, and our
-work focus on the methodology of filling the I/O throughput in cloud bursting.
+The emergence of Cloud Computing technology bring a new solution to large scale computation for it's
+economies of scale, low capital costs, high accessibility and flexibility.
+There are already many research used public cloud for a large scale computation.
+Shao el at.\cite{Geoprocessing_on_the_Amazon_cloud_computing_platform} showed a way to use Amazon
+public cloud for geoprocessing.
+Garcia, T el at.\cite{Analysis_of_Big_Data_Technologies_and_Method} run hadoop and open source
+parsers on Amazon cloud for querying large web public RDF datasets.
+Peter Wittek el at.\cite{XML_Processing_in_the_Cloud} combined an implementation-independent
+workflowdesigner with cloud computing to support small institution in ad-hoc peak computing needs.
+Richard Anthony el at.\cite{Cloud_computing_applications_for_large-scale_satellite_ground_systems}
+discuss the applicability of cloud computing to large-scale satellite ground 
+systems.
+However these work only focus on how to run these large scale application on cloud, they didn't
+consider the way to increase I/O throughput to shared storage.
+
+I/O throughput problem is a critical part in cloud computing, and many work are focus on this
+topic.
+Abhishek Gupta el at.\cite{Towards_Efficient_Mapping} try to improve the execution of HPC
+application in cloud by making a cloud-aware scheduler, and change the cloud environment
+dynamically to improve the overall performance.
+Matthias Hovestadt el at.\cite{Evaluating_Adaptive_Compression} consider another way to improve the
+I/O performance.
+They propose a new adaptive compression scheme for virtualized environments, and improve the I/O
+performance by compress the I/O data.
+Hongtao Du el at.\cite{DHFS:_A_High-Throughput_Heterogeneous_File_System_Based_on_Mainframe_for_Cloud_Storage}
+focused on the performance of metadata server in cloud environment and propose a high throughput
+system for Cloud Storage, by building metadata server on the high performance mainframe.
+They also focused on the security part of the shared stroage in cloud, and propose a
+high-throughput parallel file for secure Cloud Storage base on a new concurrent write
+mechanism\cite{PsFS:_A_high-throughput_parallel_file_system_for_secure_Cloud_Storage_system}.

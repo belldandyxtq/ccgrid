@@ -2,6 +2,7 @@
 \usepackage{color}
 \usepackage{supertabular}
 \usepackage{graphicx}
+\usepackage{flushend}
 \bibliographystyle{IEEEtran}
 
 \begin{document}
@@ -41,9 +42,11 @@ Cloud}
 Cloud offers high computational resources, strong scalability, as well as easy to access. 
 Such cloud environment offers these who have limited local computational resources a opportunity to
 run large scale applications.
-However compare to the throughput between the compute nodes inside cloud, the shared storage
-system in cloud environment can only achieve a quite low throughput, becoming the critical
-performance bottleneck for data incentive applications.
+Current data intensive large scale applications generate TB intermediate data shared among hundreds
+of compute nodes, so the shared storage throughput becomes critical part.
+However compare to the throughput in HPC system, the shared storage
+system in cloud environment can only achieve a quite low I/O throughput, becoming the
+performance bottleneck for data intensive applications.
 Furthermore, according to normal cloud pay-as-you-go pricing, longer execution time means more you
 should pay.
 In this paper, we propose a cloud based burst
@@ -52,7 +55,8 @@ We use several nodes as a burst buffer nodes, take advantage of high throughput 
 buffer application I/O data.
 We implemented a prototype of our proposal architecture, evaluated in Amazon EC2/S3(one of the most
 common public cloud today).
-We shows our architecture can achieve a high throughput.
+We shows our system can achieve a significant improvement in I/O throughput for shared storage
+in cloud computing through experimental and simulational evaluation.
 \end{abstract}
 
 %start key word
@@ -83,6 +87,9 @@ We shows our architecture can achieve a high throughput.
 %section VII
 \input{src/conclusion.tex}
 
+\section*{Acknowledgement}
+This research made use of Montage, funded by the National Aeronautics and Space Administration's
+Earth Science Technology Office, Computation Technologies Project, under Cooperative Agreement Number NCC5-626 between NASA and the California Institute of Technology. Montage is maintained by the NASA/IPAC Infrared Science Archive.
 \bibliography{src/ref/reference.bib}
 
 \end{document}

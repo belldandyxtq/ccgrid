@@ -71,6 +71,43 @@ thus we have to minimize the master involvement in file operation, client asks m
 file meta data, including the chunk placement information, then client caches these information and
 connect to I/O nodes directly for sending or receiving data.
 
+\subsection{Client daemon}
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=8cm]{img/client_daemon}
+	\caption{Client Daemon}
+	\label{implementaion:client_daemon}
+\end{figure}
+
+In each compute node, there is a client daemon, which is a file system client used to buffer I/O
+data, communicate with master nodes and I/O buffer nodes, including send I/O request and send or
+receive I/O data.
+Figure.~\ref{implementation:client_daemon} is a illustrate of client daemon inside client nodes and
+buffer queue in I/O burst nodes.
+Users don't know and should not know the information like IP address of master nodes,  client daemon
+is used to hide these information from users.
+By using client daemon, application don't need to change their code, just recompile with a library.
+As figure.~\ref{implementation:client_daemon} shows, client daemon send open, close request to master node, and cache the file information including file chunk size, a map to I/O nodes.
+When applications send read and write request, daemon send the request to corresponding I/O nodes
+according to the cached information from master node, and transfer data with I/O nodes, finally
+send to applications.
+
+%When a user application issue a write request, I/O data will be buffered in that node by client
+%daemon, when user close the file, call flush function or I/O data size exceed I/O server buffer
+%size, client daemon will try to transfer I/O data to buffer queue in I/O burst buffer, if buffer
+%queue in not full, I/O data will be sent to I/O burst buffer via interconnection network and can be
+% seen among computing nodes in the same system after that.
+%However if buffer queue is full, client daemon will block user application and wait until buffer
+%queue is ready to receive new I/O data, causing a low I/O throughput.
+
+%Similarly when user issue a read request, there are two conditions: required file is buffered in
+% buffer queue in I/O burst buffer, or file is stored only in storage in another system.
+%In the first cases, file can be transferred to computing nodes from buffer queue directly, and can
+% achieve a high throughput.
+%If data is not in buffer queue, then a read operation described below will be executed, since data
+% must be transferred from storage in another system, in this case, throughput will depend on Internet condition and it is hard to achieve a high throughput.
+
 \subsection{File Operations}
 
 \begin{figure}
@@ -80,13 +117,17 @@ connect to I/O nodes directly for sending or receiving data.
 \label{implementation:file operation}
 \end{figure}
 
-In this section we give more details about the file operation in our implementation, including open, read and write.
+In this section we give more details about the file operation in our implementation, including
+open, close, read and write.
 
-When a user try to open a file, client first send file path, access mode to master via client
-daemon, for unbuffered file, master record the file information , and assign a file id, and then send the file id to client.
+When an application open a file, client daemon first send file path, access mode to master,
+master return the file id and a map from file to I/O node,
+for unbuffered file, master record the file information, and assign a file id, and then send the
+file id to client daemon.
 
-After file opened, client can use file id to send read or write request, in order to monitor the
-file access and make swap schedule, all the read and write request are first send to master, after
+After file opened, applications can use file id to send read or write request, in order to reduce
+master's burden, these subsequent request will go to corresponding I/O nodes instead by using the
+map.
 receive the request, for file opened for reading request, master get the file size from shared
 storage, and assign several I/O nodes to this file according to file size.
 As for file opened in only writing since the file need to be create, master get file size from
@@ -94,9 +135,15 @@ client daemon and assign I/O nodes after that master send I/O nodes ip address a
 information from chunks to I/O nodes to client daemon, client cache these information.
 
 \subsection{Limitation}
-\begin{color}{red}
-\begin{itemize}
-  \item one I/O node one data chunk reduce the performance gains by using dirty flag.
-  \item blocking I/O node
-\end{itemize}
-\end{color}
+Since this is a prototype of our proposal system, there are several limitations.
+First, in this prototype implementation, both master node and I/O nodes use one thread, it means
+there is only one request can be responded at any time.
+this design may cause master easily becoming a bottleneck when the number of client increase.
+Also, since at any time one I/O node can transfer data with only one client, when the bandwidth of
+I/O node larger than compute node, it will cause the I/O node under utilization.
+However, there are some difficulties to change to a multiple threads version, for example, there
+will have a dependency between two I/O request, also synchronization is needed among read and write
+operations.
+
+Second, one I/O node one data chunk design simplified master's design, but it also brings several
+limitations. 
