@@ -5,7 +5,7 @@
 \centering
 \includegraphics[width=8cm]{img/prototype_overview}
 \caption{overview of prototype}
-\label{overview of prototype}
+\label{implemetation:overview of prototype}
 \end{figure}
 
 In order to evaluate our architecture in a real environment and compare with current architecture,
@@ -20,7 +20,7 @@ addition, and data write back when nodes deletion.
 
 For above reasons in this implementation, we adopted master-worker model, a master is designed to
 store global information and interactive with client daemon, as well as serve as a scheduler.
-The architecture of our prototype is described as Figure \ref{overview of prototype}
+The architecture of our prototype is described as Figure \ref{implemetation:overview of prototype}
 
 In our architecture, there are three types of nodes:
 \begin{itemize}
@@ -83,12 +83,12 @@ connect to I/O nodes directly for sending or receiving data.
 In each compute node, there is a client daemon, which is a file system client used to buffer I/O
 data, communicate with master nodes and I/O buffer nodes, including send I/O request and send or
 receive I/O data.
-Figure.~\ref{implementation:client_daemon} is a illustrate of client daemon inside client nodes and
+Figure.~\ref{implementaion:client_daemon} is a illustrate of client daemon inside client nodes and
 buffer queue in I/O burst nodes.
 Users don't know and should not know the information like IP address of master nodes,  client daemon
 is used to hide these information from users.
 By using client daemon, application don't need to change their code, just recompile with a library.
-As figure.~\ref{implementation:client_daemon} shows, client daemon send open, close request to master node, and cache the file information including file chunk size, a map to I/O nodes.
+As figure.~\ref{implementaion:client_daemon} shows, client daemon send open, close request to master node, and cache the file information including file chunk size, a map to I/O nodes.
 When applications send read and write request, daemon send the request to corresponding I/O nodes
 according to the cached information from master node, and transfer data with I/O nodes, finally
 send to applications.
@@ -146,4 +146,11 @@ will have a dependency between two I/O request, also synchronization is needed a
 operations.
 
 Second, one I/O node one data chunk design simplified master's design, but it also brings several
-limitations. 
+limitations
+\begin{itemize}
+  \item when application write data, 
+\end{itemize}
+
+Third, in the node addition and deletion, there is no load balance in our prototype, such limitation
+will reduce the benefit of node addition.
+
