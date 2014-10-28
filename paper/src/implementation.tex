@@ -51,7 +51,7 @@ First master must maintain the chunk size of each file, this put a burden on mas
 Second, for a large file the chunk size will become very large, cause a coarse-grained write back
 control, and reduce the performance gained by dirty flag.
 Finally, since the chunk size is decided by file size, and one I/O node store only one chunk, it is
-difficult to change buffered file size without adding to or removing some I/O nodes from file.
+difficult to change buffered file size.
 
 \subsection{Master Node}
 In our master-IOnode model, master node is the supervisor of the entire system,
@@ -121,18 +121,28 @@ In this section we give more details about the file operation in our implementat
 open, close, read and write.
 
 When an application open a file, client daemon first send file path, access mode to master,
-master return the file id and a map from file to I/O node,
+master return the file id,
 for unbuffered file, master record the file information, and assign a file id, and then send the
 file id to client daemon.
 
-After file opened, applications can use file id to send read or write request, in order to reduce
-master's burden, these subsequent request will go to corresponding I/O nodes instead by using the
-map.
-receive the request, for file opened for reading request, master get the file size from shared
-storage, and assign several I/O nodes to this file according to file size.
+After file opened, applications can use file id to send read or write request.
+In our prototype, since the master need to manage the block allocate and de-allocate operation, all
+the read, write request should send to master.
+when master receive the request, for file opened for reading
+request for the first time, master get the file size from shared storage, and assign several I/O
+nodes to this file according to file size and then send a map from chunks to I/O node to client
+daemon, after that, master connects to corresponding I/O nodes, send allocate chunk request and
+let I/O nodes read data from shared storage.
 As for file opened in only writing since the file need to be create, master get file size from
 client daemon and assign I/O nodes after that master send I/O nodes ip address as well as the map
-information from chunks to I/O nodes to client daemon, client cache these information.
+information from chunks to I/O nodes to client daemon, then master connects to corresponding I/O
+nodes, send allocate chunk request.
+
+After receiving the map from chunks to I/O nodes, client daemon connect to each I/O
+nodes in the map, and start I/O with these I/O nodes.
+
+In order to monitor workload of each I/O nodes, and make load balanced, I/O nodes send a signal to
+master at the start and the end of each data transfer.
 
 \subsection{Limitation}
 Since this is a prototype of our proposal system, there are several limitations.
@@ -142,8 +152,9 @@ this design may cause master easily becoming a bottleneck when the number of cli
 Also, since at any time one I/O node can transfer data with only one client, when the bandwidth of
 I/O node larger than compute node, it will cause the I/O node under utilization.
 However, there are some difficulties to change to a multiple threads version, for example, there
-will have a dependency between two I/O request, also synchronization is needed among read and write
-operations.
+is a dependency between read from shared storage and send to compute nodes request, I/O nodes should
+block the reading request from compute nodes until the read from shared storage finished also
+synchronization is needed among read and write operations.
 
 Second, one I/O node one data chunk design simplified master's design, but it also brings several
 limitations. It is difficult to change the file size after buffered it, as well as it reduce the
