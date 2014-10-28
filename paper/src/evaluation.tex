@@ -29,14 +29,15 @@ RAID Card 			&		Adaptec ASR-7805Q Single\\\hline
 RAID				&		Raid 0\\
 \hline
 \end{tabular}
-\caption{stroage environment}
-\label{evaluation:stroage_environment}
+\caption{storage environment}
+\label{evaluation:storage_environment}
 \end{table}
 
-here vCPUs means the number of virtual CPU in instance, and one ECU provides the equivalent CPU capacity of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor.
+Here vCPUs means the number of virtual CPU in instance, and one ECU provides the equivalent CPU
+capacity of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor.
 
 For the storage system, we used a machine inside our lab, the details is shows in
-Table.~\ref{evaluation:stroage_environment}.
+Table.~\ref{evaluation:storage_environment}.
 
 All the compute nodes, I/O nodes and master node connect with interconnection network inside Amazon
 EC2, and mount storage system by sshfs\cite{sshfs} via Internet.
@@ -76,14 +77,107 @@ throughput which is also 1Gbps(135MB/s).
 \end{figure}
 
 In the second experiment, we measured the throughput of multiple clients.
+It shows the overall throughput the whole system can achieve.
 To simplified the experiment, we assume that one client connect to only one I/O nodes, and one I/O
 nodes buffer all the I/O data for a client.
 Figure.~\ref{evaluation:multiple user performance} shows the overall throughput of the whole system.
-Since all the data are stored on the shared storage, and need to be transferred via Internet, the
-read throughput doesn't change by using I/O nodes.
+First we see the result of traditional solution in which all compute node connect to shared storage
+and read write data concurrently.
+However, since the connection bandwidth of shared storage which is the Internet bandwidth is only
+1Gbps, the overall throughput grows at first, and quickly hit the limitation.
+
+Then we look at the result using our system.
+Since all the data are stored on the shared storage, and need to
+be transferred via Internet, the read throughput doesn't change by using I/O nodes.
 However when we look at the write throughput, it shows a strong scalability, and achieved 7 times
 improvement with only 4 I/O nodes.
 
 \subsection{Simulation for Applications}
-Show our architecture can burst I/O performance for applications
-x
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/simulation_throughput}
+\caption{read write throughput of one compute node with 8 I/O nodes}
+\label{evaluation:simulation throughput}
+\end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+						&	Montage		&		Pov Ray		&		Supernovae		\\\hline
+total I/O size(MB)		&	2132.437508	&		748.916378	&		5203.214882		\\\hline
+total read size(MB)		&	1558.082295	&		681.081228	&		3283.723596		\\\hline
+total write size(MB)	&	574.355213	&		67.83515	&		1919.491286		\\\hline
+read locality size(MB)	&	1500.107713	&		678.155227	&		2429.888509		\\\hline
+compute time (s)		&	18.680705	&		1150.97979	&		1351.987268		\\
+\hline
+\end{tabular}
+\caption{Applications Execution detail}
+\label{evaluation:application execution detail}
+\end{table}
+
+In this section, we simulate the execution of the three applications shown in
+Table.~\ref{background:work flow applications} on our prototype system.
+Since the I/O throughput of one compute node will be affected by the I/O from other compute nodes,
+in order to simulate the execution of different number of compute node and find the throughput of
+one compute node.
+First we make several assumptions:
+\begin{itemize}
+  \item All I/O data are evenly distributed over all I/O nodes.
+  \item Applications access all data evenly.
+  \item I/O nodes and compute nodes have the same bandwidth T.
+  \item Multiple compute nodes can shared the throughput of I/O nodes equally.
+\end{itemize}
+
+With above assumptions, then we can calculate the rate of one compute node shared one I/O node with
+other $i$ compute node with total $m$ I/O nodes and $n$ compute node as
+
+\begin{equation}
+\text{rate}_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
+\end{equation}
+
+As we assume that multiple compute nodes can shared the throughput of I/O nodes equally, one
+compute node can achieve $\frac{1}{i+1}$ of the total throughput of I/O node when shared with other
+$i$ compute node, so we can sum it up and get the final throughput:
+\begin{equation}
+\text{Throughput}=\sum_{i=0}^{n-1} \frac{\text{rate}_i}{i+1} \times T
+\end{equation}
+
+Figure.~\ref{evaluation:simulation throughput} shows the one compute node throughput with 8 I/O
+nodes for different number of compute nodes, since for buffered file, compute nodes can assess these
+file from I/O nodes, the read an write throughput are both equal to I/O nodes throughput.
+Since we buffer all the output data, there is only read case can access to unbuffered file which
+can only achieve a low throughput.
+
+Table~.\ref{evaluation:application execution detail} shows the execution detail of the three
+applications.
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/simulation_montage}
+\caption{simulation result of montage}
+\label{evaluation:simulation result montage}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/simulation_povray}
+\caption{simulation result of pov ray}
+\label{evaluation:simulation result pov ray}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/simulation_supernovae}
+\caption{simulation result of supernovae}
+\label{evaluation:simulation result supernovae}
+\end{figure}
+
+As we can see from Figure.~\ref{evaluation:simulation result montage,evaluation:simulation result
+pov ray,evaluation:simulation result supernovae}, by using our system, all three application
+achieved a high improvement.
+Among them, Montage has the most largest improvement since it I/O a lot but do not do many
+computation.
+On the contrary, Pov Ray has a heavy computation, and a small I/O size, and get a small performance
+improvement by using our system.

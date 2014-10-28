@@ -1,4 +1,4 @@
-\section{Implementation}
+\section{Our Implementation}
 \label{sec:implementation}
 
 \begin{figure}
@@ -146,11 +146,10 @@ will have a dependency between two I/O request, also synchronization is needed a
 operations.
 
 Second, one I/O node one data chunk design simplified master's design, but it also brings several
-limitations
-\begin{itemize}
-  \item when application write data, 
-\end{itemize}
+limitations. It is difficult to change the file size after buffered it, as well as it reduce the
+benefit gain by using dirty flag.
 
-Third, in the node addition and deletion, there is no load balance in our prototype, such limitation
-will reduce the benefit of node addition.
+Third, in the node addition and deletion, there is no load balance in our prototype.
+Without load balance, after node added into the system, it need a long time to achieve speed up.
+Also in the node deletion, file write back and re-buffer are required.
 
