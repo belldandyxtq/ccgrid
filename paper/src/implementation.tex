@@ -11,7 +11,7 @@
 In order to evaluate our architecture in a real environment and compare with current architecture,
 we implemented a prototype.
 In our architecture there are several global data such as total number of burst buffer nodes,
-buffered file information. need to be shared between all nodes.
+buffered file information need to be shared between all nodes.
 And since in our proposal architecture, numbers of burst buffer nodes can be dynamically determined,
 a global scheduler is needed to decide when and how nodes are added and removed, these decision
 should be made based on global work load and local work load.
@@ -24,11 +24,11 @@ The architecture of our prototype is described as Figure \ref{implemetation:over
 
 In our architecture, there are three types of nodes:
 \begin{itemize}
-	\item A master node manages all IOnodes information, maintains a set of buffered file meta data,
-	handles operation like IOnode addition and deletion etc., and interact with clients.
+	\item A master node manages all I/O nodes information, maintains a set of buffered file meta data,
+	handles operation like I/O node addition and deletion etc., and interact with clients.
 	\item There are several I/O nodes response for actually storing data.
 	\item A daemon runs on each client machine serving for communication with
-	master and IOnodes, in order to hide architecture detail from user.
+	master and I/O nodes, in order to hide architecture detail from user.
 \end{itemize}
 
 The shared storage system are mounted on both master and I/O nodes, both of master and I/O nodes
@@ -54,13 +54,14 @@ Finally, since the chunk size is decided by file size, and one I/O node store on
 difficult to change buffered file size.
 
 \subsection{Master Node}
-In our master-IOnode model, master node is the supervisor of the entire system,
+In our master-I/O node model, master node is the supervisor of the entire system,
 master node is in charge of interactive with client, make file chunk placement, and handle file operations including file open, read and write.
-Master node also manage the I/O nodes and schedule events like node registration at node setup phase, addition and deletion.
-In order to master node majorly maintain following two data structures:
+Master node also manages the I/O nodes and schedule events like node registration at node setup
+phase, addition and deletion.
+In order to master node majorly maintains following two data structures:
 \begin{itemize}
-  \item I/O nodes information: including node ip address, total memory and available memory.
-  \item file meta data: including file path, file id, total file size, access control, chunk size,
+  \item I/O nodes information: including node IP address, total memory and available memory.
+  \item File meta data: including file path, file id, total file size, access control, chunk size,
   dirty flag and a map from chunks to I/O nodes.
 \end{itemize}
 
@@ -83,11 +84,12 @@ connect to I/O nodes directly for sending or receiving data.
 In each compute node, there is a client daemon, which is a file system client used to buffer I/O
 data, communicate with master nodes and I/O buffer nodes, including send I/O request and send or
 receive I/O data.
-Figure.~\ref{implementaion:client_daemon} is a illustrate of client daemon inside client nodes and
-buffer queue in I/O burst nodes.
+Figure.~\ref{implementaion:client_daemon} is an illustration of client daemon inside client nodes
+and buffer queue in I/O burst nodes.
 Users don't know and should not know the information like IP address of master nodes,  client daemon
 is used to hide these information from users.
-By using client daemon, application don't need to change their code, just recompile with a library.
+By using client daemon, application doesn't need to change their code, just recompile with a
+library.
 As figure.~\ref{implementaion:client_daemon} shows, client daemon send open, close request to master node, and cache the file information including file chunk size, a map to I/O nodes.
 When applications send read and write request, daemon send the request to corresponding I/O nodes
 according to the cached information from master node, and transfer data with I/O nodes, finally
@@ -128,13 +130,13 @@ file id to client daemon.
 After file opened, applications can use file id to send read or write request.
 In our prototype, since the master need to manage the block allocate and de-allocate operation, all
 the read, write request should send to master.
-when master receive the request, for file opened for reading
+When master receive the request, for file opened for reading
 request for the first time, master get the file size from shared storage, and assign several I/O
 nodes to this file according to file size and then send a map from chunks to I/O node to client
 daemon, after that, master connects to corresponding I/O nodes, send allocate chunk request and
 let I/O nodes read data from shared storage.
 As for file opened in only writing since the file need to be create, master get file size from
-client daemon and assign I/O nodes after that master send I/O nodes ip address as well as the map
+client daemon and assign I/O nodes after that master send I/O nodes IP address as well as the map
 information from chunks to I/O nodes to client daemon, then master connects to corresponding I/O
 nodes, send allocate chunk request.
 

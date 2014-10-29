@@ -27,10 +27,10 @@ The relationship of different cloud models can be shown as Figure~.\ref{backgrou
 
 Cloud computing can have following benefits:
 \begin{itemize}
-  \item User don't need to care about the machine placement and maintenance.
-  \item User don't need a large number of machines to meet a temporally request peek and idle for
+  \item Users don't need to care about the machine placement and maintenance.
+  \item Users don't need a large number of machines to meet a temporally request peek and idle for
   the other time, Since cloud instances can set up in a few minutes when the request peek occurs.
-  \item User don't need to pay for expensive hardware and software, they just need to pay for what
+  \item Users don't need to pay for expensive hardware and software, they just need to pay for what
   they used.
 \end{itemize}
 
@@ -50,7 +50,7 @@ Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,anevaluation}, the
 average write throughput of Amazon S3 is around 15MB/s and read 30MB/s, and the value is quite
 unstable\cite{anevaluation}.
 Because the Amazon S3 data center is geographically-distributed, and connect via Internet, compare
-to modern parallel file systems Amazon S3 can not achieve a high throughput.
+to modern parallel file systems Amazon S3 cannot achieve a high throughput.
 
 However, when we look at interconnection network throughput inside Amazon EC2, as Figure.~\ref{background:amazon throughput} shows, although we only show the result up to 8 pairs of nodes, each
 node achieved only 135MB/s (1GBit/s), the influence between nodes is extremely small, figure shows a perfect linear line also a strong scalability.
@@ -60,7 +60,7 @@ When we running the
 benchmark, many other users were also running applications on Amazon, so we can assume that highest
 throughput 1GB/s (8Gbit/s) shown in Figure.~\ref{background:amazon throughput} is not the
 maximum bandwidth of interconnection network in Amazon EC2.
-Our proposal system take advantage of this characteristic to burst I/O throughput.
+Our proposal system takes advantage of this characteristic to burst I/O throughput.
 
 \subsection{Burst Buffer}
 \begin{figure}
@@ -73,14 +73,14 @@ Our proposal system take advantage of this characteristic to burst I/O throughpu
 Modern high performance systems consist of thousands of compute nodes, and hundreds of
 applications are running at the same time, some I/O request peak can hardly be meet by current
 storage hierarchy. 
-Traditional approach which solve such problem by providing a higher bandwidth storage will cause
+Traditional approach, which solves such problem by providing a higher bandwidth storage will cause
 the storage system under utilization.
 Previous research\cite{on_the_role_of_burst_buffers} proposed a
 burst buffer system as a new tier of current storage hierarchy.
-Burst buffer system use several local compute nodes as a burst buffer to absorb I/O
+Burst buffer system uses several local compute nodes as a burst buffer to absorb I/O
 request. 
 By adding such new tier of storage hierarchy, temporal I/O request can be absorb by burst buffer
-without a need of a higher bandwidth storage. Figure~.\ref{background:burst buffer architecture}
+without a need of higher bandwidth storage. Figure~.\ref{background:burst buffer architecture}
 shows the architecture of burst buffer.
 
 Such burst buffer system can burst the application which has a high data locality I/O pattern, since
@@ -114,7 +114,7 @@ SExtractor	&	a program that builds a catalogue of objects from an astronomical i
 \label{background:data locality}
 \end{figure}
 
-Data locality s a phenomenon describing the same value, or related storage locations, being
+Data locality is a phenomenon describing the same value, or related storage locations, being
 frequently accessed.
 Technology like cache, instruction prefetch for memory, or the advanced branch predictor
 at the pipelining of processors is based on this phenomenon.
@@ -124,7 +124,8 @@ using our propose system greatly, So we measure the I/O data locality for the ap
 Table~.\ref{background:work flow applications}.
 We count the duplicated read at the same position and all write as data locality size, since all
 these cases data can be read from or write to buffer.
-Figure~.\ref{background:data locality} shows the results of these three applications. we can see
+Figure~.\ref{background:data locality} shows the results of these three applications.
+We can see
 that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
 are over 90\% and supernovae achieved over 80\%.
 
