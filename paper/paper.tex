@@ -1,11 +1,12 @@
 %\documentclass[10pt, conference, compsocconf]{IEEEtran}
-\documentclass[conference,compsoc]{IEEEtran}
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
 \usepackage{color}
 \usepackage{supertabular}
 \usepackage{graphicx}
 \usepackage{flushend}
 \usepackage{cite}
 \usepackage{subfigure}
+\usepackage{comment}
 \usepackage[cmex10]{amsmath}
 
 \bibliographystyle{IEEEtran}
@@ -14,8 +15,10 @@
 
 \newcommand {\xtq}[1] {\begin{color}{red}{[XTQ : #1]}\end{color}}
 %start title
-\title{A Design and Prototype of Cloud Based Burst Buffer to Burst Data Intensive Application on the
-Cloud}
+%\title{Studies of Cloud Based Burst Buffers to Burst Data Intensive Application on
+%the Cloud}
+\title{Explorations of Cloud-based Burst Buffers for I/O Acceleration}%Data Caching}%Data Intensive
+% Applications }
 
 \author{
 \IEEEauthorblockN{Tianqi Xu}
@@ -26,10 +29,10 @@ Cloud}
 	Email: belldandyxtq@gmail.com}
 	\and
 	\IEEEauthorblockN{Kento Sato}
-	\IEEEauthorblockA{?\\
+	\IEEEauthorblockA{Center for Applied Scientific Computing\\
 		Lawrence Livermore National Laboratory\\
 		Livermore, CA 94551 USA\\
-	Email: ?}
+	Email: kento@llnl.gov}
 	\and
 	\IEEEauthorblockN{Satoshi Matsuoka}
 	\IEEEauthorblockA{Global Scientific \\Information and Computing Center\\

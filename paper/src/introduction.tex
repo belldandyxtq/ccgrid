@@ -11,8 +11,8 @@ computation, by using cloud users don't need a large scale supercomputer and onl
 what they run, instead of dealing with expensive hardware, software and machine maintenance.
 These characteristics make cloud very attractive to large-scale applications.
 
-Large-scale applications often require high I/O
-throughput and data sharing between different nodes, different workflow and even different jobs.
+Large-scale applications often require high I/O\xtq{add other application type, citation}
+throughput and data sharing between different nodes, different work flow and even different jobs.
 In such cases, applications require not only high bandwidth network as well as a high throughput
 shared storage in order to share data between different work flow or difference jobs.
 Applications like Montage\cite{montage} Pov Ray\cite{povray} generate huge size of intermediate file
@@ -38,13 +38,13 @@ of the shared file system by allocate several local nodes as a burst buffer node
 request from applications, our proposal system using such burst buffer system and take advantage of
 high throughput, low latency interconnection network inside cloud environment, make some of compute
 nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
-Our proposal system not only target on the work flow applications, all the applications have
-I/O data locality or even output a huge size can get speed up on our proposal system.
-We implemented a prototype of our proposal system and evaluated on real public cloud environment, as
-well as simulated with several applications.
+\xtq{not here}Our proposal system not only target on the work flow applications, all the
+applications have I/O data locality or even output a huge size can get speed up on our proposal system.
+To validate effectiveness of burst buffers in cloud, we implemented a prototype of our
+proposal system and evaluated on real public cloud environment,
+% as well as simulated with several applications.\xtq{we e}
 We achieved 8 times speed up on reading as well as 7 times speed up on writing with 8 I/O nodes, and
 achieved a up to 4 times speed up on execution of data intensive applications from simulation.
-
 Our contributions can be summarized as following:
 \begin{itemize}
 	\item A cloud based I/O burst buffer system for increasing data transfer throughput in cloud environment;
@@ -54,6 +54,7 @@ Our contributions can be summarized as following:
     performance burst by using our proposal system;
 \end{itemize}
 %2
+
 The rest of this paper is organized as follows. 
 In Section \ref{sec:background}, we clarify the motivation and the background.
 We introduce an overview of the I/O bursting buffer architecture in Section \ref{sec:architecture}, 

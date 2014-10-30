@@ -147,6 +147,7 @@ In order to monitor workload of each I/O nodes, and make load balanced, I/O node
 master at the start and the end of each data transfer.
 
 \subsection{Limitation}
+
 Since this is a prototype of our proposal system, there are several limitations.
 First, in this prototype implementation, both master node and I/O nodes use one thread, it means
 there is only one request can be responded at any time.
@@ -165,4 +166,7 @@ benefit gain by using dirty flag.
 Third, in the node addition and deletion, there is no load balance in our prototype.
 Without load balance, after node added into the system, it needs a long time to achieve speed up.
 Also in the node deletion, file write back and re-buffer are required.
+
+\xtq{1.突っ込まれる箇所とdefence}
+\xtq{2.今回の目的はburst bufferの有効性を示すためてある、大した問題ではない}
 
