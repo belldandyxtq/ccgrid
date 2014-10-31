@@ -35,26 +35,24 @@ Cloud computing can have following benefits:
   they used.
 \end{itemize}
 \end{comment}
-
 \subsection{Interconnection Network vs. Shared Storage}
-\begin{figure}
-\centering
-%\includegrpahics[width=8cm]{img/}
-\end{figure}
+
 \begin{figure}
 \centering
 \includegraphics[width=8cm]{img/amazon_throughput}
-\caption{Amazon Interconnection Network Throughput}
+\caption{Amazon Interconnection Network Throughput vs. Amazon S3 Throughput}
 \label{background:amazon throughput}
 \end{figure}
+
 Many previous research measured the I/O throughput in cloud \cite{Chiba,Transactions_a_la_carte,
-Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,anevaluation}, the result shows the
-average write throughput of Amazon S3 is around 15MB/s and read 30MB/s, and the value is quite
-unstable\cite{anevaluation}.
+Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,anevaluation}, the I/O bandwidth of
+Amazon S3 is much lower than that in HPC system, and the value is quite unstable\cite{anevaluation}.
 Because the Amazon S3 data center is geographically-distributed, and connect via Internet, compare
 to modern parallel file systems Amazon S3 cannot achieve a high throughput.
-
-However, when we look at interconnection network throughput inside Amazon EC2, as Figure.~\ref{background:amazon throughput} shows, although we only show the result up to 8 pairs of nodes, each
+ 
+However, when we look at interconnection network throughput inside Amazon EC2,
+Figure.~\ref{background:amazon throughput} shows a comparison of Amazon Interconnection Network
+throughput and Amazon S3 throughput, although we only show the result up to 8 pairs of nodes, each
 node achieved only 135MB/s (1GBit/s), the influence between nodes is extremely small, figure shows a perfect linear line also a strong scalability.
 We measure the interconnection network by using Iperf\cite{iperf}, which was developed by NLANR/DAST
 as a modern alternative for measuring TCP and UDP bandwidth performance.
@@ -62,7 +60,15 @@ When we running the
 benchmark, many other users were also running applications on Amazon, so we can assume that highest
 throughput 1GB/s (8Gbit/s) shown in Figure.~\ref{background:amazon throughput} is not the
 maximum bandwidth of interconnection network in Amazon EC2.
-Our proposal system takes advantage of this characteristic to burst I/O throughput.
+As Figure.~\ref{background:amazon throughput} shows, Interconnection Network throughput inside
+Amazon EC2 is proportional to numbers of nodes used, on the contrary, Amazon S3 throughput is much
+lower than it, and unstable.
+Also we can find that all nodes access to the same file is slower than access to different file,
+it is because Amazon S3 will distribute different file over machines to increase I/O throughput,
+access to the same file will be limited by S3 server machine bandwidth, and will cause connection
+conflict.
+Our proposal system takes advantage of the characteristic of
+Interconnection network inside cloud system to burst I/O throughput.
 
 \subsection{Burst Buffer}
 \begin{figure}
@@ -106,8 +112,10 @@ Montage		&		a portable software toolkit for constructing custom, science-grade
 mosaics by composing multiple astronomical images\cite{montage}.\\\hline
 pov ray		&		a ray tracing program which generates images from a text-based scene description, and is
 available for a variety of computer platforms\cite{povray}.\\\hline
-SExtractor	&	a program that builds a catalogue of objects from an astronomical image	\\%bierf
-% introction of supernovea and sextractor and 
+Supernovae	&	a program use SExtractor\cite{SExtractor}, a program that builds a catalogue of objects
+from an astronomical image and CFITSIO\cite{fitsio},  a library of C and Fortran subroutines for
+reading and writing data files in FITS (Flexible Image Transport System) data format to find supernovae in a set of
+astronomical image.\\
 \hline
 \end{tabular}
 \caption{Work Flow Applications}
@@ -125,6 +133,7 @@ Data locality is a phenomenon describing the same value, or related storage loca
 frequently accessed.
 Technology like cache, instruction prefetch for memory, or the advanced branch predictor
 at the pipelining of processors is based on this phenomenon.
+Many previous research 
 Since our proposal system buffer I/O data and as previous section shows the buffered data can be
 accessed in a high throughput, applications' I/O data locality will affect the performance gains by
 using our propose system greatly, So we measure the I/O data locality for the applications shown in
