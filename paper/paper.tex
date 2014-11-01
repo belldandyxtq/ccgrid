@@ -15,6 +15,8 @@
 \begin{document}
 
 \newcommand {\xtq}[1] {\begin{color}{red}{[XTQ : #1]}\end{color}}
+\newcommand{\kento}[1]{{\color{blue} [Kento: {\it #1}]}}
+
 %\newcommand {\xtq}[1] {}
 %start title
 %\title{Studies of Cloud Based Burst Buffers to Burst Data Intensive Application on
@@ -28,6 +30,7 @@
 		Tokyo Institute of Technology\\
 		2-12-1-W8-33, Ohokayama,\\
 		Meguro-ku, Tokyo 152-8552 Japan\\
+		\kento{Use titech email address !}
 	Email: belldandyxtq@gmail.com}
 	\and
 	\IEEEauthorblockN{Kento Sato}
@@ -45,27 +48,67 @@
 }
 
 \maketitle
+\kento{
+\begin{itemize}
+  \item Consistency:
+  \begin{itemize}
+  	\item cloud based $\to$ cloud-based 
+  \end{itemize} 
+\end{itemize}
+ 
+ }
+
 
 %start abstract
 \begin{abstract}
-Cloud offers high computational resources, strong scalability, as well as easy to access. 
-Such cloud environment offers these who have limited local computational resources a opportunity to
-run large scale applications.
-Current data intensive large scale applications generate TB intermediate data shared among hundreds
-of compute nodes, so the shared storage throughput becomes critical part.
-However compare to the throughput in HPC system, the shared storage
-system in cloud environment can only achieve a quite low I/O throughput, becoming the
-performance bottleneck for data intensive applications.
-Furthermore, according to normal cloud pay-as-you-go pricing, longer execution time means more you
-should pay.
-In this paper, we propose a cloud based burst
-buffer system as a new tier in cloud storage system to absorb I/O request.
-We use several nodes as a burst buffer nodes, take advantage of high throughput inside cloud to
-buffer application I/O data.
-We implemented a prototype of our proposal architecture, evaluated in Amazon EC2/S3(one of the most
-common public cloud today).
-We shows our system can achieve a significant improvement in I/O throughput for shared storage
-in cloud computing through experimental and simulation evaluation.
+
+Cloud offers high computational resources, scalability, as well as easy to access. 
+%Such cloud environments offer those who have limited local computational
+%resources a opportunity to run large scale applications.
+Such cloud environments provide the users with virtually unlimited computational
+resources to run HPC applications at larger scale than what in-house
+systems can provide. 
+%Current data intensive large scale applications generate TB
+%intermediate data shared among hundreds of compute nodes, so the shared storage
+% throughput becomes critical part.
+Since large scale data intensive applications typically generate huge amount of
+intermediate data, and shared by hundreds and thousands of compute nodes,
+data intensive applications require high I/O throughput to shared storage.
+%However compare to the throughput in HPC system, the shared storage
+%system in cloud environment can only achieve a quite low I/O throughput,
+% becoming the performance bottleneck for data intensive applications.
+However, current shared storage in cloud environments can not provide
+enough I/O throughput for data intensive applications.
+The low I/O throughput becomes a performance bottleneck.
+%Furthermore, according to normal cloud pay-as-you-go pricing,
+%longer execution time means more you should pay.
+Furthermore, the prolonged execution time incur more cost to users as the most
+of cloud providers employ pay-as-you-go pricing modes.
+%In this paper, we propose a cloud based
+%burst buffer system as a new tier in cloud storage system to absorb I/O
+% request.
+To accelerate I/O performance, we propose a cloud-based burst buffer system as a
+new tier in cloud storage systems.
+%We use several nodes as a burst buffer nodes,
+%take advantage of high throughput inside cloud to buffer application I/O data.
+The cloud-based burst buffer system uses computing nodes as burst buffer nodes,
+and buffers applications' data in the burst buffer nodes. Because throughput
+between compute nodes is much higher than shared storage throughput, we can
+accelerate I/O performance for data intensive applications.
+%We implemented a
+%prototype of our proposal architecture, evaluated in Amazon EC2/S3(one of the
+% most common public cloud today).
+%We shows our system can achieve a significant improvement in I/O throughput for
+% shared storage
+%in cloud computing through experimental and simulation evaluation.
+To explore the effectiveness of cloud-based burst buffers, 
+We implement a prototype, and evaluate the system in Amazon
+EC2/S3.
+\kento{Let us describe about the modeling.}
+The experimental and simulation evaluations show that our prototype system
+can achieve significant improvement in I/O throughput.
+\kento{Let us include ``quantitative'' results of both experimental results and
+simulation results.}
 \end{abstract}
 
 %start key word
@@ -100,8 +143,14 @@ in cloud computing through experimental and simulation evaluation.
 \input{src/conclusion.tex}
 
 \section*{Acknowledgement}
+This work was performed under the auspices of the U.S. Department of Energy by
+Lawrence Livermore National Laboratory under Contract DE-AC52-07NA27344.
+(LLNL-CONF-663584-DRAFT).
+\kento{Please add EBD Crest acknowledgment}
 This research made use of Montage, funded by the National Aeronautics and Space Administration's
-Earth Science Technology Office, Computation Technologies Project, under Cooperative Agreement Number NCC5-626 between NASA and the California Institute of Technology. Montage is maintained by the NASA/IPAC Infrared Science Archive.
+Earth Science Technology Office, Computation Technologies Project, under
+Cooperative Agreement Number NCC5-626 between NASA and the California Institute
+of Technology. Montage is maintained by the NASA/IPAC Infrared Science Archive.
 \bibliography{src/ref/reference.bib}
 
 \end{document}
