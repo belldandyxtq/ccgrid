@@ -133,9 +133,17 @@ Data locality is a phenomenon describing the same value, or related storage loca
 frequently accessed.
 Technology like cache, instruction prefetch for memory, or the advanced branch predictor
 at the pipelining of processors is based on this phenomenon.
-Many previous research 
-Since our proposal system buffer I/O data and as previous section shows the buffered data can be
-accessed in a high throughput, applications' I/O data locality will affect the performance gains by
+Many previous research investigated data locality of various
+applications including 
+mapreduce,\cite{Investigation_of_Data_Locality_in_MapReduce}, scientific
+\cite{Intrinsic_data_locality_of_modern_scientific_workloads},
+OLTP\cite{Data_locality_characterization_of_OLTP},
+numeric\cite{Analyzing_data_locality_in_numeric_applications}etc., and showed that these
+applications has a strong data locality.
+Among these applications, work flow applications shows a strongest data locality, in this paper, we
+focus on work flow applications.
+Since our proposal
+system buffer I/O data and as previous section shows the buffered data can be accessed in a high throughput, applications' I/O data locality will affect the performance gains by
 using our propose system greatly, So we measure the I/O data locality for the applications shown in
 Table~.\ref{background:work flow applications}.
 We count the duplicated read at the same position and all write as data locality size, since all
