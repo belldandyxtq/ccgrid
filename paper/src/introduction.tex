@@ -1,63 +1,113 @@
 \section{Introduction}
 \label{sec:introduction}
-A growing focus on cloud computing for its high scalability as well as high computational
-resources, for example, Amazon provided a high performance computing instance allows user to run
-complex science, engineering, and business applications on these instances with a high bandwidth low latency
-network, and high compute capabilities.
-Cloud provide a fast setup, usually cloud instances can set up in a few minutes, this
-make the on-demand usage available.
-Such cloud environment is suitable for large scale
-computation, by using cloud users don't need a large scale supercomputer and only need to pay
-what they run, instead of dealing with expensive hardware, software and machine maintenance.
-These characteristics make cloud very attractive to large-scale applications.
+% Kento: Growing focus ``does not'' allows users to run ...
+% A growing focus on cloud computing for its high scalability as well as high computational
+% resources, for example, Amazon provided a high performance computing instance allows user to run
+% complex science, engineering, and business applications on these instances with a high bandwidth low latency
+% network, and high compute capabilities.
+% Cloud provide a fast setup, usually cloud instances can set up in a few
+% minutes, this make the on-demand usage available. 
+% Such cloud environment is suitable for large scale
+% computation, by using cloud users don't need a large scale supercomputer and
+% only need to pay what they run, instead of dealing with expensive hardware, software and machine maintenance.
+% These characteristics make cloud very attractive to large-scale applications.
+Cloud have been gathering attention of application developers because
+of its elasticity. With the elasticity, the users enjoy virtually unlimited
+computational resources on the fly, and pay the cost depending on the usage.
+In addition, recent clouds also provides computational resources for high
+performance computing \kento{Let us add citations of AWS, Microsoft Asure and
+few others}.
+The computational power and the scalability enable its users to run high
+performance scientific applications faster than ever.
+For example, Amazon EC2 provides HPC instances with high bandwidth networks,
+SSD-embedded I/O subsystems and GPU accelerators
+\kento{citation} .
+These characteristics make cloud computing more attractive to large scale
+scientific applications.
+\par
+% Large-scale applications often require high I/O
+% throughput and data sharing between different nodes, different work flow and even different jobs.
+% In such cases, applications require not only high bandwidth network as well as a high throughput
+% shared storage in order to share data between different nodes, different work flow or difference
+% jobs.
+% Applications like Montage\cite{montage} Pov Ray\cite{povray} generate huge size of intermediate file
+% need to be shared between different nodes in different work flow.
+% Such applications are now running majorly on high performance computing system like supercomputers,
+% with a GB/s level shared storage as well as high interconnection network.
+% Furthermore, large scale applications require for a large amount of compute node as well as a
+% running time from several hours to several days, machine failure is Inevitable and checkpoint will be required to enable
+% fast recovery from machine failure\cite{checkpointing}, in order to make a timely checkpoint, a
+% fast global shared storage is indispensable.
+% 
+% However, in current cloud environment, the global shared storage can not meet the demand.
+% For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon
+% Simple Storage Service} (Amazon S3)\cite{AMAZON_AWS}, however compared to the throughput of shared
+% storage system in high performance computing system, Amazon S3 can only achieve a extremely low throughput,
+% as well as has a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
+% Also it is difficult to build each compute center a reasonable size data center, since it cannot
+% achieve a high utilization of storage system.
 
-Large-scale applications often require high I/O
-throughput and data sharing between different nodes, different work flow and even different jobs.
-In such cases, applications require not only high bandwidth network as well as a high throughput
-shared storage in order to share data between different nodes, different work flow or difference
-jobs.
-Applications like Montage\cite{montage} Pov Ray\cite{povray} generate huge size of intermediate file
-need to be shared between different nodes in different work flow.
-Such applications are now running majorly on high performance computing system like supercomputers,
-with a GB/s level shared storage as well as high interconnection network.
-Furthermore, large scale applications require for a large amount of compute node as well as a
-running time from several hours to several days, machine failure is Inevitable and checkpoint will be required to enable
-fast recovery from machine failure\cite{checkpointing}, in order to make a timely checkpoint, a
-fast global shared storage is indispensable.
+However, if we execute data intensive workloads on a cloud environment,
+the users suffer from the prolonged execution time and the cost because of the
+low throughput to shared storage and the data intensive.
+For example, cloud-based shared storage, Amazon Simple Storage Service (Amazon
+S3), provides only a few hundreds MB/s of throughput because instances
+in Amazon EC2 is connected to Amazon S3 via Internet.
+As demands to higher I/O throughput grow for big data analysis and
+checkpointing workloads for general scientific applications, current cloud
+environments can not provide enough performance for data intensive workloads.
+Thus, improvement of I/O performance in clouds is critical to accelerate such
+I/O workloads.
+\par
+% In order to solve such problem, we propose a cloud based burst buffer system. Burst buffer system
+% has been proposed as a new tier in the storage hierarchy to hide the low bandwidth and high latency
+% of the shared file system by allocate several local nodes as a burst buffer nodes to absorb the I/O
+% request from applications, our proposal system using such burst buffer system and take advantage of
+% high throughput, low latency interconnection network inside cloud environment, make some of compute
+% nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
+% To validate effectiveness of burst buffers in cloud, we implemented a prototype of our
+% proposal system and evaluated on real public cloud environment,
+% % as well as simulated with several applications.\xtq{we e}
+% We achieved 3 times speed up on reading as well as 4 times speed up on writing with 8 I/O nodes, and
+% achieved a up to 4 times speed up on execution of data intensive applications from simulation.
+In order to solve the problem, we propose a cloud-based burst buffer system.
+Burst buffers have been proposed as a new tier of storage in the storage
+hierarchy in order to provide higher I/O throughput for shared storage by
+absorbing bursty I/O requests from applications. 
+Because most of HPC applications have data access
+locality, if we cache data, which is accessed in near future, on the burst
+buffers, we can accelerate the data intensive workloads \kento{citation for
+applications having data access locality}.
+In addition, if we apply burst buffers to clouds, we can build on-demand burst
+buffers by taking advantage of the elasticity in clouds. 
+To explore the effectiveness of burst buffers in cloud, 
+we implement a prototype of a cloud-based burst buffer system, and models the
+system to estimate execution time of data intensive applications.
+Our experimental results using Amazon EC2 shows that we achieve 3 times of
+improvement in read throughput, and 4 times in write throughput with 8 nodes of
+burst buffers. Our simulation based on the model shows that we can
+improve execution time of real data intensive applications by 4 times.
+\kento{Let us include the improvement of monetary cost, because it's obvious to
+improve if we spend more money.}
+\par
 
-However, in current cloud environment, the global shared storage can not meet the demand.
-For example, in Amazon public cloud system, there are a famous shared storage called \emph{Amazon
-Simple Storage Service} (Amazon S3)\cite{AMAZON_AWS}, however compared to the throughput of shared
-storage system in high performance computing system, Amazon S3 can only achieve a extremely low throughput,
-as well as has a high latency, since storage machine in Amazon S3 are geographically distributed and connected via Internet.
-Also it is difficult to build each compute center a reasonable size data center, since it cannot
-achieve a high utilization of storage system.
-
-In order to solve such problem, we propose a cloud based burst buffer system. Burst buffer system
-has been proposed as a new tier in the storage hierarchy to hide the low bandwidth and high latency
-of the shared file system by allocate several local nodes as a burst buffer nodes to absorb the I/O
-request from applications, our proposal system using such burst buffer system and take advantage of
-high throughput, low latency interconnection network inside cloud environment, make some of compute
-nodes as a I/O burst buffer nodes to buffer I/O data and bursting I/O sensitive applications in cloud environment.
-To validate effectiveness of burst buffers in cloud, we implemented a prototype of our
-proposal system and evaluated on real public cloud environment,
-% as well as simulated with several applications.\xtq{we e}
-We achieved 3 times speed up on reading as well as 4 times speed up on writing with 8 I/O nodes, and
-achieved a up to 4 times speed up on execution of data intensive applications from simulation.
 Our contributions can be summarized as following:
 \begin{itemize}
-	\item A cloud based I/O burst buffer system for increasing data transfer throughput in cloud environment;
-	\item A quantitative evaluation of prototype of I/O burst buffer system in Amazon EC2 to show the
-	Effectiveness of our proposal system;
-    \item A simulation with several applications in Amazon EC2 to show how applications can achieve
-    performance burst by using our proposal system;
+	\item A cloud-based burst buffer system accelerating data intensive
+	workloads in cloud environments;
+	\item \kento{include Modeling} 
+	\item Improvement of I/O performance by using our cloud-based burst buffer
+	system in Amazon EC2;
+    \item Quantitative evaluation targeting real environments where
+    multiple real applications run, and access to the cloud-based burst buffers;
 \end{itemize}
 %2
-
+\par
 The rest of this paper is organized as follows. 
-In Section \ref{sec:background}, we clarify the motivation and the background.
-We introduce an overview of the I/O bursting buffer architecture in Section \ref{sec:architecture}, 
-and describe the detail about the first prototype implementation of our proposal architecture in
-order to evaluate its performance in a real environment \ref{sec:implementation}.
-In Section \ref{sec:evaluation}, we present our experimental results based of our performance models.
-Finally, we show some related work in Section \ref{sec:related work}, and conclusion in Section \ref{sec:conclusion}.
+In Section \ref{sec:background}, we describe the background and the motivation.
+Then, we introduce an overview of the cloud-based burst buffer system in Section \ref{sec:architecture}, 
+and describe the details about our prototype implementation in Section \ref{sec:implementation}.
+Next, in Section \ref{sec:evaluation}, we present our experimental results
+of the cloud-based burst buffer system.
+Finally, we describe related work in Section \ref{sec:related work}, and
+conclusion in Section \ref{sec:conclusion}.
