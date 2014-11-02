@@ -1,4 +1,25 @@
 \subsection{modeling}
 \label{sec:modeling}
 
-In order to simulate the execution of the three applications shown in Table.~\ref{}
+In order to simulate the execution of the three applications shown in Table.~\ref{background:work
+flow applications}
+we introduce a model for simulate the workload of the whole system, and get the throughput of one
+I/O node.
+
+\subsection{Throughput of one I/O node}
+Throughput of one compute node.
+\begin{equation}
+Throughput = \frac{T}{(1 + E(X))}
+\end{equation}
+
+here X: \# of other compute nodes accessing the same I/O node.
+E(x) can be calculate as:
+\begin{equation}
+E(X_i) = 1 \times (\frac{1}{m}) \times I0_ration(i)
+\end{equation}
+
+\begin{equation}
+E(X) = \sum E(X_i)
+\end{equation}
+
+\subsection{different workload pattern}

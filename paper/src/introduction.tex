@@ -15,12 +15,13 @@ Cloud have been gathering attention of application developers because
 of its elasticity. With the elasticity, the users enjoy virtually unlimited
 computational resources on the fly, and pay the cost depending on the usage.
 In addition, recent clouds also provides computational resources for high
-performance computing \kento{Let us add citations of AWS, Microsoft Asure and
-few others}.
+performance computing
+\xtqmod{\cite{AMAZON_AWS,Azure,IBM_public_cloud,oracle_cloud,hp_cloud}}\kento{Let us add citations
+of AWS, Microsoft Asure and few others}.
 The computational power and the scalability enable its users to run high
 performance scientific applications faster than ever.
 For example, Amazon EC2 provides HPC instances with high bandwidth networks,
-SSD-embedded I/O subsystems and GPU accelerators
+SSD-embedded I/O subsystems and GPU accelerators\xtqmod{\cite{AWS_HPC}}
 \kento{citation} .
 These characteristics make cloud computing more attractive to large scale
 scientific applications.
@@ -76,8 +77,8 @@ hierarchy in order to provide higher I/O throughput for shared storage by
 absorbing bursty I/O requests from applications. 
 Because most of HPC applications have data access
 locality, if we cache data, which is accessed in near future, on the burst
-buffers, we can accelerate the data intensive workloads \kento{citation for
-applications having data access locality}.
+buffers, we can accelerate the data intensive workloads
+\xtqmod{\cite{montage,povray}}\kento{citation for applications having data access locality}.
 In addition, if we apply burst buffers to clouds, we can build on-demand burst
 buffers by taking advantage of the elasticity in clouds. 
 To explore the effectiveness of burst buffers in cloud, 

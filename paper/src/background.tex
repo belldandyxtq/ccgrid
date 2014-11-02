@@ -1,10 +1,6 @@
 %to do
 \section{background}
 \label{sec:background}
-\kento{Emphasize (i) several applications have data access locality and (ii)
-the data access workloads can be accelerated by using burst buffers here. So I
-think we should describe ``Data access locality'' first, then burst buffers (+
-network v.s. s3)}
 \begin{comment}
 \subsection{Cloud Computing}
 \begin{figure}
@@ -48,40 +44,22 @@ Cloud computing can have following benefits:
 \label{background:amazon throughput}
 \end{figure}
 
-\kento{There is no topic sentence in this subsection. Why did you write this
-Subection ? why do you compare  Interconnection Network vs. Shared Storage}
-
-
-Previous studies
-measured the I/O throughputs in clouds \cite{Chiba,Transactions_a_la_carte,
-Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids, anevaluation},
-the I/O bandwidth of Amazon S3 is much lower than that in HPC system, and the value is quite unstable\cite{anevaluation}.
+Many previous research measured the I/O throughput in cloud \cite{Chiba,Transactions_a_la_carte,
+Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,anevaluation}, the I/O bandwidth of
+Amazon S3 is much lower than that in HPC system, and the value is quite unstable\cite{anevaluation}.
 Because the Amazon S3 data center is geographically-distributed, and connect via Internet, compare
 to modern parallel file systems Amazon S3 cannot achieve a high throughput.
-\kento{Because you already evaluated S3 performance, I do not think this
-paragraph is necessary. Instead, please use these sentences to support your
-results, and show the results are consistent to evaluations done by others}
  
 However, when we look at interconnection network throughput inside Amazon EC2,
-\kento{What does the ``inside'' mean ? please describe what did you measure}
 Figure.~\ref{background:amazon throughput} shows a comparison of Amazon Interconnection Network
-throughput and Amazon S3 throughput, although we only show the result up to 8 pairs of nodes 
-\kento{Because you did not describe how to measure the performance,
-``pairs'' is not unknown}, each node achieved only 135MB/s (1GBit/s), the
-influence between nodes is extremely small, figure shows a perfect linear line also a strong scalability.
+throughput and Amazon S3 throughput, although we only show the result up to 8 pairs of nodes, each
+node achieved only 135MB/s (1GBit/s), the influence between nodes is extremely small, figure shows a perfect linear line also a strong scalability.
 We measure the interconnection network by using Iperf\cite{iperf}, which was developed by NLANR/DAST
-as a modern alternative for measuring TCP and UDP bandwidth performance
-\kento{It's too detailed. And Should be mentioned before showing results}.
+as a modern alternative for measuring TCP and UDP bandwidth performance.
 When we running the
 benchmark, many other users were also running applications on Amazon, so we can assume that highest
 throughput 1GB/s (8Gbit/s) shown in Figure.~\ref{background:amazon throughput} is not the
-maximum bandwidth of interconnection network in Amazon EC2 \kento{Why do you
-mention this ? If you want to say ``this results is not trustful because other
-applications were running'', please remove this figure and this subsection.
-Instead, you should mention ``Even with other applications are running, the
-performance is still better than S3'' . But, in fat tree topology, almost peak
-throughput can be achieved even if other applications are running like in
-TSUBAME. So I do not think your expectation is true}.
+maximum bandwidth of interconnection network in Amazon EC2.
 As Figure.~\ref{background:amazon throughput} shows, Interconnection Network throughput inside
 Amazon EC2 is proportional to numbers of nodes used, on the contrary, Amazon S3 throughput is much
 lower than it, and unstable.
@@ -91,10 +69,6 @@ access to the same file will be limited by S3 server machine bandwidth, and will
 conflict.
 Our proposal system takes advantage of the characteristic of
 Interconnection network inside cloud system to burst I/O throughput.
-\kento{Please mention ``so what?''. Why did you compare network(interconnection
-network) and storage(S3) ? People will think this comparison is unfair, and no
-meaning unless you mention that. This subsection looks weird to me because this
-section does not have any ``topic sentence'' and ``so what ?'' sentence}
 
 \subsection{Burst Buffer}
 \begin{figure}
@@ -123,11 +97,8 @@ request for the same data can be accessed from burst buffer.
 Furthermore, applications which write a lot also can benefit from burst buffer system, by buffering
 output data in burst buffer, application can go ahead without waiting data be finally write to
 storage.
-\kento{I think we do not need this subsection or we should combine with the
-previous subsection, because there is no new information from the introduction
-section}
 
-\subsection{Data Access Locality}
+\subsection{Data Locality}
 \begin{comment}
 add other kinds of application data locality details.
 as more as possible
@@ -157,9 +128,7 @@ astronomical image.\\
 \caption{Data Locality}
 \label{background:data locality}
 \end{figure}
-
-\kento{There is no topic sentence in this subsection. Why did you write this
-subection ? why do you describe data access locality} 
+\xtq{what is muse?what can muse do?how to use muse to get data locality}
 Data locality is a phenomenon describing the same value, or related storage locations, being
 frequently accessed.
 Technology like cache, instruction prefetch for memory, or the advanced branch predictor
@@ -171,22 +140,19 @@ mapreduce,\cite{Investigation_of_Data_Locality_in_MapReduce}, scientific
 OLTP\cite{Data_locality_characterization_of_OLTP},
 numeric\cite{Analyzing_data_locality_in_numeric_applications}etc., and showed that these
 applications has a strong data locality.
-\kento{If possible with you, please describe also checkpointing workloads}
-
 Among these applications, work flow applications shows a strongest data locality, in this paper, we
 focus on work flow applications.
 Since our proposal
 system buffer I/O data and as previous section shows the buffered data can be accessed in a high throughput, applications' I/O data locality will affect the performance gains by
-using our propose system greatly, So we measure the I/O data locality for the applications shown in
-Table~.\ref{background:work flow applications}.
+using our propose system greatly, So we measure the I/O data locality for the applications.
+\xtqmod{
+We use MUSE\cite{MUSE}, which is a tool to monitor file open, close, read, write operations
+including read/write address, read/write time, and the sizes，
+to measure applications data access locality, result is shown in Table~\ref{background:work
+flow applications}.}
 We count the duplicated read at the same position and all write as data locality size, since all
 these cases data can be read from or write to buffer.
 Figure~.\ref{background:data locality} shows the results of these three applications.
 We can see
 that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
 are over 90\% and supernovae achieved over 80\%.
-
-%The reason is that these applications are work flow application, the whole job consists of several
-%sub jobs, the output of previous job can be the input of subsequent job, also some job will access
-%the same input file.
-%So if we buffer the output data and input data, the subsequent job can access the data via LAN.

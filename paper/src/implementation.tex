@@ -37,7 +37,8 @@ have the same assess permission to the shared file system.
 \subsection{File Chunk}
 In our implementation, files are usually stored in more than one I/O node depends on the files'
 size and numbers of I/O nodes available.
-Files are divided into mutable-size \emph{chunks}, each I/O node store one chunk.
+\xtq{detail　chunk size}
+Files are divided into dynamic determined-size \emph{chunks}, each I/O node store one chunk.
 Such one I/O node one chunk design simplified our data layout design, and operations in I/O nodes addition and deletion.
 For each chunk we adopted a \emph{dirty flag}, in order to decide whether this chunk has been modified.
 In write back phase, only the modified chunk needs to be written back to storage.
@@ -67,10 +68,11 @@ In order to master node majorly maintains following two data structures:
 
 Since only master has the global knowledge of file chunk placement, client must connect to master
 to get these information.
+\xtq{same file or different file}
 However, in such master-worker model, master is easy to become a bottleneck of the whole system,
 thus we have to minimize the master involvement in file operation, client asks master about the
-file meta data, including the chunk placement information, then client caches these information and
-connect to I/O nodes directly for sending or receiving data.
+file meta data, including the chunk placement information, \xtq{delete cache}then client caches
+these information and connect to I/O nodes directly for sending or receiving data.
 
 \subsection{Client daemon}
 
@@ -86,11 +88,13 @@ data, communicate with master nodes and I/O buffer nodes, including send I/O req
 receive I/O data.
 Figure.~\ref{implementaion:client_daemon} is an illustration of client daemon inside client nodes
 and buffer queue in I/O burst nodes.
+\xtq{add communication mmap}
 Users don't know and should not know the information like IP address of master nodes,  client daemon
 is used to hide these information from users.
 By using client daemon, application doesn't need to change their code, just recompile with a
 library.
-As figure.~\ref{implementaion:client_daemon} shows, client daemon send open, close request to master node, and cache the file information including file chunk size, a map to I/O nodes.
+As figure.~\ref{implementaion:client_daemon} shows, client daemon send open, close request to master
+node, and cache the file information including file chunk size, a map to I/O nodes.
 When applications send read and write request, daemon send the request to corresponding I/O nodes
 according to the cached information from master node, and transfer data with I/O nodes, finally
 send to applications.
