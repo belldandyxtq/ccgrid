@@ -1,5 +1,7 @@
 \section{Our Implementation}
 \label{sec:implementation}
+\kento{In this section, we need to describe information, which should be
+written in ``Developers' document''}
 
 \begin{figure}
 \centering
@@ -37,21 +39,31 @@ have the same assess permission to the shared file system.
 \subsection{File Chunk}
 In our implementation, files are usually stored in more than one I/O node depends on the files'
 size and numbers of I/O nodes available.
-Files are divided into mutable-size \emph{chunks}, each I/O node store one chunk.
+\kento{I think we should use another word instead of ``mutable''.
+``configurable'' ?, ``dynamically changeable'', ``dynamically
+optimized size ?'' ?} Files are divided into mutable-size \emph{chunks}, each
+I/O node store one chunk.
 Such one I/O node one chunk design simplified our data layout design, and operations in I/O nodes addition and deletion.
-For each chunk we adopted a \emph{dirty flag}, in order to decide whether this chunk has been modified.
+\kento{I can not understand this. You mean if an application write X bytes
+of data to N of burst buffer nodes, the system divide the data into N of chunks
+with X/N bytes of size, OR totally mutable-size for each chunk ? Please send me
+an email to answer as Q1} \kento{Q2: Given N of burst buffer nodes, can the
+system divide the file into M (< N) ? Please send me an email to answer as Q2} For each chunk
+we adopted a \emph{dirty flag}, in order to decide whether this chunk has been modified.
 In write back phase, only the modified chunk needs to be written back to storage.
 This dirty flag can reduce the write back data size and thus reduce the Internet congestion.
 
 Applications usually generate various sizes of files, since in our architecture, memory is precious
 resources, more memory means we can buffer more files, mutable size chunk design avoid the
 disadvantage of memory waste in fixed-size chunk design, and enable us just to allocate requested size of memory.
+\kento{I can not understand this because of Q1}
 However such one I/O node one chunk design and mutable size has some disadvantages.
 First master must maintain the chunk size of each file, this put a burden on master.
 Second, for a large file the chunk size will become very large, cause a coarse-grained write back
 control, and reduce the performance gained by dirty flag.
-Finally, since the chunk size is decided by file size, and one I/O node store only one chunk, it is
-difficult to change buffered file size.
+\kento{Q3: I can not understand why, because the chunk size is mutable. Please
+send me an email to answer as Q3} Finally, since the chunk size is decided by
+file size, and one I/O node store only one chunk, it is difficult to change buffered file size.
 
 \subsection{Master Node}
 In our master-I/O node model, master node is the supervisor of the entire system,
@@ -60,7 +72,8 @@ Master node also manages the I/O nodes and schedule events like node registratio
 phase, addition and deletion.
 In order to master node majorly maintains following two data structures:
 \begin{itemize}
-  \item I/O nodes information: including node IP address, total memory and available memory.
+  \item I/O nodes information: including node IP address, total memory and
+  available memory. 
   \item File meta data: including file path, file id, total file size, access control, chunk size,
   dirty flag and a map from chunks to I/O nodes.
 \end{itemize}
@@ -71,6 +84,9 @@ However, in such master-worker model, master is easy to become a bottleneck of t
 thus we have to minimize the master involvement in file operation, client asks master about the
 file meta data, including the chunk placement information, then client caches these information and
 connect to I/O nodes directly for sending or receiving data.
+\kento{Q4: How do clients guarantee consistency between cached meta data \&
+original meta data in the master node ? Please
+send me an email to answer as Q4}
 
 \subsection{Client daemon}
 
@@ -84,8 +100,11 @@ connect to I/O nodes directly for sending or receiving data.
 In each compute node, there is a client daemon, which is a file system client used to buffer I/O
 data, communicate with master nodes and I/O buffer nodes, including send I/O request and send or
 receive I/O data.
-Figure.~\ref{implementaion:client_daemon} is an illustration of client daemon inside client nodes
-and buffer queue in I/O burst nodes.
+\kento{Q5: Is a client daemon really running on each client node ? Because you
+say ``daemon'', I understand the daemon process is a different process to the
+application's process. Is it true ? Please
+send me an email to answer as Q5} Figure.~\ref{implementaion:client_daemon}
+is an illustration of client daemon inside client nodes and buffer queue in I/O burst nodes.
 Users don't know and should not know the information like IP address of master nodes,  client daemon
 is used to hide these information from users.
 By using client daemon, application doesn't need to change their code, just recompile with a
