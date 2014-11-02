@@ -39,38 +39,130 @@ Cloud computing can have following benefits:
   they used.
 \end{itemize}
 \end{comment}
-\subsection{Interconnection Network vs. Shared Storage}
+
+
+\subsection{Data Access Locality}
+\begin{comment}
+add other kinds of application data locality details.
+as more as possible
+\end{comment}
+
+\begin{table}
+\centering
+\begin{tabular}{|c|p{150pt}|}
+\hline
+Montage		&		a portable software toolkit for constructing custom, science-grade 
+mosaics by composing multiple astronomical images\cite{montage}.\\\hline
+pov ray		&		a ray tracing program which generates images from a text-based scene description, and is
+available for a variety of computer platforms\cite{povray}.\\\hline
+Supernovae	&	a program use SExtractor\cite{SExtractor}, a program that builds a catalogue of objects
+from an astronomical image and CFITSIO\cite{fitsio},  a library of C and Fortran subroutines for
+reading and writing data files in FITS (Flexible Image Transport System) data format to find supernovae in a set of
+astronomical image.\\
+\hline
+\end{tabular}
+\caption{Work Flow Applications}
+\label{background:work flow applications}
+\end{table}
 
 \begin{figure}
 \centering
-\includegraphics[width=8cm]{img/amazon_throughput}
-\caption{Amazon Interconnection Network Throughput vs. Amazon S3 Throughput}
-\label{background:amazon throughput}
+\includegraphics[width=8cm]{img/data_locality.pdf}
+\caption{Data Locality}
+\label{background:data locality}
+\end{figure}
+
+\kento{There is no topic sentence in this subsection. Why did you write this
+subection ? why do you describe data access locality} 
+Since our proposal
+system buffer I/O data and as previous section shows the buffered data can be accessed in a high
+throughput, applications' data access locality will affect the performance gains by using our
+propose system greatly.
+Data locality is a phenomenon describing the same value, or related storage locations, being
+frequently accessed.
+Technology like cache, instruction prefetch for memory, or the advanced branch predictor
+at the pipelining of processors is based on this phenomenon.
+Many previous research investigated data locality of various
+applications including 
+mapreduce,\cite{Investigation_of_Data_Locality_in_MapReduce}, scientific
+\cite{Intrinsic_data_locality_of_modern_scientific_workloads},
+OLTP\cite{Data_locality_characterization_of_OLTP},
+numeric\cite{Analyzing_data_locality_in_numeric_applications}, checkpointing\cite{checkpointing}
+workloads etc., and showed that these applications has a strong data locality.
+\kento{If possible with you, please describe also checkpointing workloads}
+Among these applications, work flow applications shows a strongest data locality, in this paper, we
+focus on work flow applications.
+We measure the I/O data locality for the applications shown in
+Table~.\ref{background:work flow applications}.
+We count the duplicated read at the same position and all write as data locality size, since all
+these cases data can be read from or write to buffer.
+Figure~.\ref{background:data locality} shows the results of these three applications.
+We can see
+that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
+are over 90\% and supernovae achieved over 80\%.
+
+%The reason is that these applications are work flow application, the whole job consists of several
+%sub jobs, the output of previous job can be the input of subsequent job, also some job will access
+%the same input file.
+%So if we buffer the output data and input data, the subsequent job can access the data via LAN.
+
+\subsection{Interconnection Network vs. Shared Storage}
+
+\begin{figure}[h]
+\centering 
+\subfigure[Amazon S3 read (same file)]{
+\label{background:amazon s3 read same file}
+\includegraphics[width=4cm]{img/s3_read_same_file}}
+\subfigure[Amazon S3 write (same file)]{
+\label{background:amazon s3 write same file}
+\includegraphics[width=4cm]{img/s3_write_same_file}}
+\subfigure[Amazon S3 read (different file)]{
+\label{background:amazon s3 read different file}
+\includegraphics[width=4cm]{img/s3_read_different_file}}
+\subfigure[Amazon S3 write (different file)]{
+\label{background:amazon s3 write different file}
+\includegraphics[width=4cm]{img/s3_write_different_file}}
+\caption{Amazon S3 throughput}
+\label{background:amazon s3 throughput}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm]{img/point_to_point}
+\caption{Amazon point to point throughput}
+\label{background:Amazon point to point throughput}
 \end{figure}
 
 \kento{There is no topic sentence in this subsection. Why did you write this
 Subection ? why do you compare  Interconnection Network vs. Shared Storage}
-
-
-Previous studies
-measured the I/O throughputs in clouds \cite{Chiba,Transactions_a_la_carte,
-Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids, anevaluation},
-the I/O bandwidth of Amazon S3 is much lower than that in HPC system, and the value is quite unstable\cite{anevaluation}.
-Because the Amazon S3 data center is geographically-distributed, and connect via Internet, compare
-to modern parallel file systems Amazon S3 cannot achieve a high throughput.
+In public cloud system, although shared storage cannot achieve a high performance, the
+interconnection network between compute nodes usually has a high bandwidth.
+Our proposal system takes advantage of high throughput of interconnection network between compute
+nodes inside cloud system to burst I/O throughput.
+In order to show the difference of throughput between Amazon S3 and interconnection network between
+compute nodes.
+First we measured the sequential I/O performance of Amazon S3, we measured read and write throughput
+with different size of compute nodes, and we also measured the two I/O pattern performance which
+will compute nodes shared the same file and each compute nodes access to different file.
+Figure~\ref{background:amazon s3 throughput} shows the result, we can see that compare to modern parallel file systems in HPC systems, for example TSUBAME lustre can achieve 6-8GB/s\cite{checkpointing}
+ Amazon S3 cannot achieve a high throughput, and the value is
+quite unstable.
+Many previous studies also measured the I/O throughput in clouds
+\cite{Chiba,Transactions_a_la_carte, Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,
+anevaluation} and got a similar result.
 \kento{Because you already evaluated S3 performance, I do not think this
 paragraph is necessary. Instead, please use these sentences to support your
 results, and show the results are consistent to evaluations done by others}
  
-However, when we look at interconnection network throughput inside Amazon EC2,
+However, when we look at the point to point communication throughput between two compute nodes
+inside Amazon EC2,
+We measure this interconnection network by using Iperf [14].
 \kento{What does the ``inside'' mean ? please describe what did you measure}
 Figure.~\ref{background:amazon throughput} shows a comparison of Amazon Interconnection Network
-throughput and Amazon S3 throughput, although we only show the result up to 8 pairs of nodes 
+throughput and Amazon S3 throughput, although we only show the result up to 8 pairs of nodes
 \kento{Because you did not describe how to measure the performance,
 ``pairs'' is not unknown}, each node achieved only 135MB/s (1GBit/s), the
 influence between nodes is extremely small, figure shows a perfect linear line also a strong scalability.
-We measure the interconnection network by using Iperf\cite{iperf}, which was developed by NLANR/DAST
-as a modern alternative for measuring TCP and UDP bandwidth performance
 \kento{It's too detailed. And Should be mentioned before showing results}.
 When we running the
 benchmark, many other users were also running applications on Amazon, so we can assume that highest
@@ -89,8 +181,6 @@ Also we can find that all nodes access to the same file is slower than access to
 it is because Amazon S3 will distribute different file over machines to increase I/O throughput,
 access to the same file will be limited by S3 server machine bandwidth, and will cause connection
 conflict.
-Our proposal system takes advantage of the characteristic of
-Interconnection network inside cloud system to burst I/O throughput.
 \kento{Please mention ``so what?''. Why did you compare network(interconnection
 network) and storage(S3) ? People will think this comparison is unfair, and no
 meaning unless you mention that. This subsection looks weird to me because this
@@ -126,67 +216,3 @@ storage.
 \kento{I think we do not need this subsection or we should combine with the
 previous subsection, because there is no new information from the introduction
 section}
-
-\subsection{Data Access Locality}
-\begin{comment}
-add other kinds of application data locality details.
-as more as possible
-\end{comment}
-
-\begin{table}
-\centering
-\begin{tabular}{|c|p{150pt}|}
-\hline
-Montage		&		a portable software toolkit for constructing custom, science-grade 
-mosaics by composing multiple astronomical images\cite{montage}.\\\hline
-pov ray		&		a ray tracing program which generates images from a text-based scene description, and is
-available for a variety of computer platforms\cite{povray}.\\\hline
-Supernovae	&	a program use SExtractor\cite{SExtractor}, a program that builds a catalogue of objects
-from an astronomical image and CFITSIO\cite{fitsio},  a library of C and Fortran subroutines for
-reading and writing data files in FITS (Flexible Image Transport System) data format to find supernovae in a set of
-astronomical image.\\
-\hline
-\end{tabular}
-\caption{Work Flow Applications}
-\label{background:work flow applications}
-\end{table}
-
-\begin{figure}
-\centering
-\includegraphics[width=8cm]{img/data_locality.pdf}
-\caption{Data Locality}
-\label{background:data locality}
-\end{figure}
-
-\kento{There is no topic sentence in this subsection. Why did you write this
-subection ? why do you describe data access locality} 
-Data locality is a phenomenon describing the same value, or related storage locations, being
-frequently accessed.
-Technology like cache, instruction prefetch for memory, or the advanced branch predictor
-at the pipelining of processors is based on this phenomenon.
-Many previous research investigated data locality of various
-applications including 
-mapreduce,\cite{Investigation_of_Data_Locality_in_MapReduce}, scientific
-\cite{Intrinsic_data_locality_of_modern_scientific_workloads},
-OLTP\cite{Data_locality_characterization_of_OLTP},
-numeric\cite{Analyzing_data_locality_in_numeric_applications}etc., and showed that these
-applications has a strong data locality.
-\kento{If possible with you, please describe also checkpointing workloads}
-
-Among these applications, work flow applications shows a strongest data locality, in this paper, we
-focus on work flow applications.
-Since our proposal
-system buffer I/O data and as previous section shows the buffered data can be accessed in a high throughput, applications' I/O data locality will affect the performance gains by
-using our propose system greatly, So we measure the I/O data locality for the applications shown in
-Table~.\ref{background:work flow applications}.
-We count the duplicated read at the same position and all write as data locality size, since all
-these cases data can be read from or write to buffer.
-Figure~.\ref{background:data locality} shows the results of these three applications.
-We can see
-that the I/O pattern of all the three applications shows a strong data locality. Montage and Pov ray
-are over 90\% and supernovae achieved over 80\%.
-
-%The reason is that these applications are work flow application, the whole job consists of several
-%sub jobs, the output of previous job can be the input of subsequent job, also some job will access
-%the same input file.
-%So if we buffer the output data and input data, the subsequent job can access the data via LAN.
