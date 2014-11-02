@@ -1,9 +1,31 @@
-\section{Proposed Cloud-based Buffer Bursts}
+\section{Cloud-based Buffer Burst System}
 \label{sec:architecture}
-
+\kento{This section need to be totally reorganized. But please resolve my
+comments first}
 %\begin
+\subsection{Overview}
+\kento{
+\begin{itemize}
+  \item Describe overview (compute nodes, burst buffer nodes, storage) in
+  the Figure 4.
+  \item Describe each role of compute nodes, burst buffer nodes, and
+  stoarge
+  \item What is the difference to conventional burst buffers 
+\end{itemize}
+}
+\subsection{I/O operations}
+\kento{
+\begin{itemize}
+  \item How the write operations works (e.g. chaching) ? and Why write
+  performance is improved ?
+  \item How the read operation works (e.g. caching) ? and Why read performance
+  is improved ?
+\end{itemize}
+}
+
 An overview of I/O burst buffer architecture is described in this section.
-As we mentioned in the previous section, our model takes advantage of high throughput inside a system, and use buffer queue system in order to increase throughput between two systems.
+As we mentioned in the previous section, our model takes advantage of high
+throughput inside a system, and use buffer queue system in order to increase throughput between two systems.
 %Two kinds of buffer are used in our I/O burst buffer architecture, the first one is in client computing node, first buffer user I/O in the same node, another one is in I/O buffer nodes.
 The main idea is that some of computing nodes serve as a I/O buffer nodes in each system, for write I/O data, if buffer queue in I/O buffer nodes is not full, data can first be buffered in buffer queue in the same system, and then client can finish write operation without waiting data be finally transferred to storage system.
 Actually, since many jobs use multiple nodes work together and the output of some nodes can be the
