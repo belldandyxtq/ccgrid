@@ -16,13 +16,11 @@ of its elasticity. With the elasticity, the users enjoy virtually unlimited
 computational resources on the fly, and pay the cost depending on the usage.
 In addition, recent clouds also provides computational resources for high
 performance computing
-\xtqmod{\cite{AMAZON_AWS,Azure,IBM_public_cloud,oracle_cloud,hp_cloud}}\kento{Let us add citations
-of AWS, Microsoft Asure and few others}.
-The computational power and the scalability enable its users to run high
+\cite{AMAZON_AWS,Azure,IBM_public_cloud,oracle_cloud,hp_cloud}.
+The computational power and the scalability enable the users to run high
 performance scientific applications faster than ever.
 For example, Amazon EC2 provides HPC instances with high bandwidth networks,
-SSD-embedded I/O subsystems and GPU accelerators\xtqmod{\cite{AWS_HPC}}
-\kento{citation} .
+SSD-embedded I/O subsystems and GPU accelerators\cite{AWS_HPC}.
 These characteristics make cloud computing more attractive to large scale
 scientific applications.
 \par
@@ -48,17 +46,18 @@ scientific applications.
 % Also it is difficult to build each compute center a reasonable size data center, since it cannot
 % achieve a high utilization of storage system.
 
-However, if we execute data intensive workloads on a cloud environment,
-the users suffer from the prolonged execution time and the cost because of the
-low throughput to shared storage and the data intensive.
+However, if we execute \emph{data intensive workloads}, such as big data
+analysis and checkpointing for visualization or fault tolerance, on a cloud environment, the
+users suffer from the prolonged execution time and the cost because of the low
+throughput to shared storage and the data intensive workloads.
 For example, cloud-based shared storage, Amazon Simple Storage Service (Amazon
 S3), provides only a few hundreds MB/s of throughput because instances
 in Amazon EC2 is connected to Amazon S3 via Internet.
-As demands to higher I/O throughput grow for big data analysis and
-checkpointing workloads for general scientific applications, current cloud
-environments can not provide enough performance for data intensive workloads.
+As demands for higher I/O throughput grow, 
+current cloud environments cannot provide enough I/O performance for 
+\emph{data intensive workloads}.
 Thus, improvement of I/O performance in clouds is critical to accelerate such
-I/O workloads.
+\emph{data intensive workloads}.
 \par
 % In order to solve such problem, we propose a cloud based burst buffer system. Burst buffer system
 % has been proposed as a new tier in the storage hierarchy to hide the low bandwidth and high latency
@@ -74,16 +73,18 @@ I/O workloads.
 In order to solve the problem, we propose a cloud-based burst buffer system.
 Burst buffers have been proposed as a new tier of storage in the storage
 hierarchy in order to provide higher I/O throughput for shared storage by
-absorbing bursty I/O requests from applications. 
+absorbing bursty I/O requests from applications running on supercomputers
+\cite{on_the_role_of_burst_buffers}.
 Because most of HPC applications have data access
 locality, if we cache data, which is accessed in near future, on the burst
-buffers, we can accelerate the data intensive workloads
+buffers, we can accelerate the access performance to the data
 \xtqmod{\cite{montage,povray}}\kento{citation for applications having data access locality}.
 In addition, if we apply burst buffers to clouds, we can build on-demand burst
 buffers by taking advantage of the elasticity in clouds. 
-To explore the effectiveness of burst buffers in cloud, 
+To explore the effectiveness of burst buffers in clouds, 
 we implement a prototype of a cloud-based burst buffer system, and models the
 system to estimate execution time of data intensive applications.
+\kento{Let us change when we finish the experiments}
 Our experimental results using Amazon EC2 shows that we achieve 3 times of
 improvement in read throughput, and 4 times in write throughput with 8 nodes of
 burst buffers. Our simulation based on the model shows that we can
@@ -92,14 +93,16 @@ improve execution time of real data intensive applications by 4 times.
 improve if we spend more money.}
 \par
 
+\kento{Let us change contribution later}
 Our contributions can be summarized as following:
 \begin{itemize}
 	\item A cloud-based burst buffer system accelerating data intensive
 	workloads in cloud environments;
-	\item \kento{include Modeling} 
+	\item \kento{Let us include modeling when we finish the section, and the
+	evaluation}
 	\item Improvement of I/O performance by using our cloud-based burst buffer
 	system in Amazon EC2;
-    \item Quantitative evaluation targeting real environments where
+    \item Quantitative evaluations targeting real environments where
     multiple real applications run, and access to the cloud-based burst buffers;
 \end{itemize}
 %2
