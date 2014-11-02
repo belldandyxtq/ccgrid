@@ -16,10 +16,21 @@ comments first}
 \subsection{I/O operations}
 \kento{
 \begin{itemize}
+  \item How burst buffer start ?
   \item How the write operations works (e.g. chaching) ? and Why write
-  performance is improved ?
+  performance is improved for applications ?
+  \begin{itemize}
+  	\item If the buffers are not full, \ldots
+  	\item If the buffer are full, \ldots
+  \end{itemize}
   \item How the read operation works (e.g. caching) ? and Why read performance
-  is improved ?
+  is improved for applications?
+  \begin{itemize}
+  	\item If the data is in the buffers, \ldots
+  	\item If the data is not in the buffers, \ldots
+  \end{itemize}
+  \item Any other things to mention here ??
+  \item How burst buffers end ? What happens to data in the burst buffers ?
 \end{itemize}
 }
 
