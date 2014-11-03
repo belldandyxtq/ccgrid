@@ -1,8 +1,30 @@
-\section{Our Implementation}
+\section{Design and Implementation of Our Cloud-based Burst Buffer System}
 \label{sec:implementation}
-\kento{In this section, we need to describe information, which should be
-written in ``Developers' document''}
+To achieve the challenges, we design and implement our cloud-based burst buffer.
+\kento{Will write more later \ldots}
 
+\subsection{The Role of The Cloud-base Burst Buffers}
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=8cm]{img/architecture_overview}
+	\caption{overall illustrate of I/O Burst Buffer Architecture}
+	\label{architecture:overview}
+\end{figure}
+
+Figure \ref{architecture:overview} shows an overview of our cloud-based
+burst buffer system, which consist of \emph{compute nodes}, \emph{burst buffers}
+and a \emph{shared cloud storage}. \emph{Compute nodes} are nodes on which
+applications run. \emph{Burst buffers} are provided by the same instances
+as \emph{compute nodes}. Unlike \emph{compute nodes}, The instances
+of the \emph{burst buffers} provide remote memory buffers for data caching.
+When the applications read or write data, the I/O operations are handled via
+\emph{burst buffers}.  The \emph{shared cloud storage} is persistent shared storage such as Amazon S3.
+Because the applications read or write all data via the burst buffers, the
+the caching operations under burst buffers is agnostic to the applications.
+Hence, the applications can benefit from the two-level of storage hierarchy
+without knowing the underlying operations.
+
+\subsection{Design of The Cloud-base Burst Buffers}
 \begin{figure}
 \centering
 \includegraphics[width=8cm]{img/prototype_overview}
@@ -10,10 +32,43 @@ written in ``Developers' document''}
 \label{implemetation:overview of prototype}
 \end{figure}
 
-In order to evaluate our architecture in a real environment and compare with current architecture,
-we implemented a prototype.
-In our architecture there are several global data such as total number of burst buffer nodes,
-buffered file information need to be shared between all nodes.
+% In order to validate the effectiveness of the cloud-based burst buffers in real
+% environments,  evaluate our architecture in a real environment and compare
+% with current architecture, we implemented a prototype.
+% Figure \ref{implemetation:overview of prototype} shows the design of cloud-based
+% burst buffers.
+% In our architecture there are several global data such as total number of burst buffer nodes,
+% buffered file information need to be shared between all nodes.
+% And since in our proposal architecture, numbers of burst buffer nodes can be dynamically determined,
+% a global scheduler is needed to decide when and how nodes are added and removed, these decision
+% should be made based on global work load and local work load.
+% Also a scheduler is needed to handle the operation like re-balance of buffered data when nodes
+% addition, and data write back when nodes deletion.
+% 
+% For above reasons in this implementation, we adopted master-worker model, a master is designed to
+% store global information and interactive with client daemon, as well as serve as a scheduler.
+% The architecture of our prototype is described as Figure \ref{implemetation:overview of prototype}
+% 
+% In our architecture, there are three types of nodes:
+% \begin{itemize}
+% 	\item A master node manages all burst buffer nodes information, maintains a set of buffered file
+% 	meta data, handles operation like burst buffer node addition and deletion etc., and interact with
+% 	clients.
+% 	\item There are several burst buffer nodes response for actually storing data.
+% 	\item A daemon runs on each client machine serving for communication with
+% 	master and burst buffer nodes, in order to hide architecture detail from user.
+% \end{itemize}
+% 
+% The shared storage system are mounted on both master and burst buffer nodes, both of master and
+% burst buffer nodes have the same assess permission to the shared file system.
+
+In order to validate the effectiveness of the cloud-based burst buffer system in
+real environments, we implement a prototype of the system.
+Figure \ref{implemetation:overview of prototype} shows the design of cloud-based
+burst buffers.
+\kento{\par ==== Start from here tomorrow == \par}
+In our design, there are several global data such as total number of
+burst buffer nodes, buffered file information need to be shared between all nodes.
 And since in our proposal architecture, numbers of burst buffer nodes can be dynamically determined,
 a global scheduler is needed to decide when and how nodes are added and removed, these decision
 should be made based on global work load and local work load.
