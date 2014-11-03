@@ -76,14 +76,12 @@ hierarchy in order to provide higher I/O throughput for shared storage by
 absorbing bursty I/O requests from applications running on supercomputers
 \cite{on_the_role_of_burst_buffers}.
 Because most of HPC applications have data access
-locality, if we cache data, which is accessed in near future, on the burst
+locality, if we cache the data, which is accessed in near future, on the burst
 buffers, we can accelerate the access performance to the data
-\cite{montage,povray,
-Intrinsic_data_locality_of_modern_scientific_workloads,
-Data_locality_characterization_of_OLTP,
-Analyzing_data_locality_in_numeric_applications}.
+\cite{montage,povray} \kento{a few more citations}.
 In addition, if we apply burst buffers to clouds, we can build on-demand burst
 buffers by taking advantage of the elasticity in clouds. 
+\kento{local storage use ? in-memory}
 To explore the effectiveness of burst buffers in clouds, 
 we implement a prototype of a cloud-based burst buffer system, and models the
 system to estimate execution time of data intensive applications.
