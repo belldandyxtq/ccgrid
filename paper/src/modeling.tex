@@ -5,21 +5,56 @@ In order to simulate the execution of the three applications shown in Table.~\re
 flow applications}
 we introduce a model for simulate the workload of the whole system, and get the throughput of one
 I/O node.
+\subsection{Cost}
+
+execute without burst buffers cost:
+\begin{equation}
+Cost_{S3} = \text{cost}_{compute node}+\text{cost}_{S3}
+\end{equation}
+
+execute with only one node Cost:
+\begin{equation}
+Cost_{BB} = \text{cost}_{compute node}+\text{cost}_{burst buffers}+\text{cost}_{S3}
+\end{equation}
+
+compute node cost can be calculate as:
+
+\begin{equation}
+\text{compute node}_{cost} = \text{compute node unit cost} \times \text{\# of compute
+node} \ time \text{execution time}
+\end{equation}
+
+burst buffers cost can be calculate as, (here \# of burst buffer +1(master))
+\begin{equation}
+\text{cost}_{burst buffers} = \text{burst buffers} \times \text{(\# of burst buffers+1)} \times
+\text{execution time}
+\end{equation}
+
+S3 cost can be calculate as:
+\xtq{according to http://aws.amazon.com/ec2/pricing/, I/O to and from S3 IN THE SAME available zone
+with compute nodes cost 0}
+\begin{equation}
+\text{S3}_{cost} = \text{I/O size}\times \text{unit cost}
+\end{equation}
+
 
 \subsection{Throughput of one I/O node}
-Throughput of one compute node.
+Burst buffers throughput($BBT$) of one compute node.
 \begin{equation}
-Throughput = \frac{T}{(1 + E(X))}
+BBT = \frac{T}{(1 + E(X))}
 \end{equation}
 
 here X: \# of other compute nodes accessing the same I/O node.
 E(x) can be calculate as:
-\begin{equation}
-E(X_i) = 1 \times (\frac{1}{m}) \times I0_ration(i)
-\end{equation}
 
 \begin{equation}
 E(X) = \sum E(X_i)
 \end{equation}
+
+\begin{equation}
+E(X_i) = 1 + (\frac{1}{m}) \times I0_ration(i)
+\end{equation}
+
+
 
 \subsection{different workload pattern}
