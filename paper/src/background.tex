@@ -357,13 +357,14 @@ and high scalability on the fly.
 % Amazon EC2 is proportional to numbers of nodes used, on the contrary, Amazon S3 throughput is much
 % lower than it, and unstable.
 % Also we can find that all nodes access to the same file is slower than access to different file,
-% it is because Amazon S3 will distribute different file over machines to increase I/O throughput,
-% access to the same file will be limited by S3 server machine bandwidth, and will cause connection
+% it is because Amazon S3 will distribute different file over machines to
+% increase I/O throughput, access to the same file will be limited by S3 server machine bandwidth, and will cause connection
 % conflict.
 % \kento{Please mention ``so what?''. Why did you compare network(interconnection
 % network) and storage(S3) ? People will think this comparison is unfair, and no
 % meaning unless you mention that. This subsection looks weird to me because this
 % section does not have any ``topic sentence'' and ``so what ?'' sentence}
 \subsection{Challenges in Cloud-based Burst Buffers}
+\kento{exploiting network for I/O, multiple applications, limited buffer size}
 \kento{focus is modeling because \ldots}
 
