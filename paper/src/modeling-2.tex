@@ -1,0 +1,70 @@
+\section{Modeling of The Cloud-based Burst Buffers}
+\label{sec:modeling}
+\subsection{Modeling of I/O throughput}
+In practice, when we use the cloud-based burst buffers in real environments,
+these burst buffers are shared, and accessed by multiple compute nodes.
+Therefore, the I/O throughput can be degraded by other compute nodes.
+To estimate the I/O throughput and simulate the overall execution
+time of applications, we model the I/O throughput of the cloud-based buffer
+buffers.
+
+In our model, we make two assumptions: 
+\begin{itemize}
+  \item The master node evenly distributes data of applications across burst
+  buffers nodes evenly so that I/O workloads are balanced across
+  burst buffer nodes;
+%  \item All I/O data are evenly distributed over all I/O nodes.
+%  \item Applications access all data evenly.
+  \item If multiple compute nodes access to a single burst buffer node, the
+  bandwidth is divided by the number of compute nodes accessing to the node.
+%  \item Multiple compute nodes can share the throughput of I/O nodes equally.
+\end{itemize}
+If a \emph{target} compute node access to a single burst buffer node(A), and the  
+a single burst buffer is being by $i$ number of compute nodes, the actual
+throughput of the target compute node, $T_{a}(i)$, becomes
+$T_{a}(i)=\frac{T_{b}}{i+1}$ where $T_{b}$ is a peak I/O bandwidth of a single
+burst buffer node. Thus, overall average I/O throughput, $T$, can be computed as:
+\begin{equation}
+\text{T}=\sum_{i=0}^{n-1} P_{i} \times T_{a}(i)
+%\text{T}=\frac{T}{e} 
+%e=1+\frac{n-1}{m}
+\end{equation}
+The $n$ denote total number of compute nodes, and $P_{i}$ denotes probability
+where $i$ number of compute nodes accessing the burst buffer node(A). 
+Hence, the $P_{i}$ can be computed as:
+
+
+\begin{equation}
+\text{P}_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
+\end{equation}
+
+where $m$ denotes total number of burst buffer nodes. 
+By using the model, we can estimate the throughput of applications in
+environments where multiple compute nodes are running and randomly accessing the
+burst buffer nodes.
+
+\subsection{Modeling of Cost}
+In addition to I/O throughput of the cloud-based burst buffers, another
+important aspect is the cost.
+While I/O throughput can be accelerated by burst buffers, the cost can be
+increased because of additional nodes for burst buffers.
+To estimate the cost, we also model the cost of the cloud-based burst buffers.
+
+When we run an application using $\acute{n}$ number of compute nodes in a
+environment where $b$ number of burst buffers are used, the cost is charged for
+the compute node, and burst buffer nodes.
+Thus, the total cost, $C_{total}$ can be computed as:   If a \emph{target}
+compute node
+\begin{equation}
+C_{total} = \{　\acute{n} \times \text{C}_{cn}+ (b \times \text{C}_{bn} \times
+ + 1 \times C_{mn}) \times \frac{\acute{n}}{n} \}\times etime
+\end{equation}
+
+where $C_{cn}$, $C_{bn}$ and $C_{mn}$ denote costs per second (${\it \$} /sec$)
+of a compute node, a burst buffer node, and a meta data server node
+respectively, $etime$ denotes the execution time of the application. For the
+fairness of the cost, the cost for burst buffers is charged depending on the
+number of compute nodes used by the application in this model. By using this
+model, we estimate the overall cost of an application run. 
+
+

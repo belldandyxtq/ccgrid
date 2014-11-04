@@ -121,38 +121,38 @@ compute time (s)		&	18.680705	&		1150.97979	&		1351.987268		\\
 
 \xtq{define what and why is $T$}
 
-In this section, we simulate the execution of the three applications shown in
-Table.~\ref{background:work flow applications} on our prototype system.
-Since the I/O from other compute nodes will affect the I/O throughput of one compute node,
-in order to simulate the execution of different number of compute node and find the throughput of
-one compute node.
-First we make several assumptions:
-\begin{itemize}
-  \item Master distribute I/O data of applications over all I/O nodes evenly, and applications
-  evenly access I/O data.
-%  \item All I/O data are evenly distributed over all I/O nodes.
-%  \item Applications access all data evenly.
-  \item The I/O bandwidth between compute nodes and I/O nodes is always $T$.
-  \item If multiple compute nodes connect to a single I/O node, they can share the bandwidth of the
-  I/O node equally.
-%  \item Multiple compute nodes can share the throughput of I/O nodes equally.
-\end{itemize}
-
-As we assume that multiple compute nodes can share the throughput of I/O nodes equally, one
-compute node can achieve $\frac{1}{i+1}$ of the total throughput of I/O node when shared with other
-$i$ compute node, so we can sum it up and get the final throughput:
-\begin{equation}
-\text{Throughput}=\sum_{i=0}^{n-1} \frac{\text{rate}_i}{i+1} \times T
-%\text{T}=\frac{T}{e} 
-%e=1+\frac{n-1}{m}
-\end{equation}
-
-With above assumptions, then we can calculate the rate of one compute node shared one I/O node with
-other $i$ compute node with total $m$ I/O nodes and $n$ compute node as
-
-\begin{equation}
-\text{rate}_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
-\end{equation}
+ In this section, we simulate the execution of the three applications shown in
+ Table.~\ref{background:work flow applications} on our prototype system.
+ Since the I/O from other compute nodes will affect the I/O throughput of one compute node,
+ in order to simulate the execution of different number of compute node and find the throughput of
+ one compute node.
+% First we make several assumptions:
+% \begin{itemize}
+%   \item Master distribute I/O data of applications over all I/O nodes evenly, and applications
+%   evenly access I/O data.
+% %  \item All I/O data are evenly distributed over all I/O nodes.
+% %  \item Applications access all data evenly.
+%   \item The I/O bandwidth between compute nodes and I/O nodes is always $T$.
+%   \item If multiple compute nodes connect to a single I/O node, they can share the bandwidth of the
+%   I/O node equally.
+% %  \item Multiple compute nodes can share the throughput of I/O nodes equally.
+% \end{itemize}
+% 
+% As we assume that multiple compute nodes can share the throughput of I/O nodes equally, one
+% compute node can achieve $\frac{1}{i+1}$ of the total throughput of I/O node when shared with other
+% $i$ compute node, so we can sum it up and get the final throughput:
+% \begin{equation}
+% \text{Throughput}=\sum_{i=0}^{n-1} \frac{\text{rate}_i}{i+1} \times T
+% %\text{T}=\frac{T}{e} 
+% %e=1+\frac{n-1}{m}
+% \end{equation}
+% 
+% With above assumptions, then we can calculate the rate of one compute node shared one I/O node with
+% other $i$ compute node with total $m$ I/O nodes and $n$ compute node as
+% 
+% \begin{equation}
+% \text{rate}_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
+% \end{equation}
 
 
 Figure.~\ref{evaluation:simulation throughput} shows the one compute node throughput with 8 I/O
