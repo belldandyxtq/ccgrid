@@ -78,24 +78,20 @@ absorbing bursty I/O requests from applications running on supercomputers
 Because most of HPC applications have data access
 locality, if we cache the data, which is accessed in near future, on the burst
 buffers, we can accelerate the access performance to the data
-\cite{montage,povray} \kento{a few more citations}.
+\cite{montage,povray}.
 In addition, if we apply burst buffers to clouds, we can build on-demand burst
 buffers by taking advantage of the elasticity in clouds. 
 \kento{local storage use ? in-memory}
 To explore the effectiveness of burst buffers in clouds, 
 we implement a prototype of a cloud-based burst buffer system, and models the
 system to estimate execution time of data intensive applications.
-\kento{Let us change when we finish the experiments}
 Our experimental results using Amazon EC2 shows that we achieve 3 times of
 improvement in read throughput, and 4 times in write throughput with 8 nodes of
 burst buffers. Our simulation based on the model shows that we can
-improve execution time of real data intensive applications by 4 times.
-\kento{Let us include the improvement of monetary cost, because it's obvious to
-improve if we spend more money.}
+improve execution time of real data intensive applications by 1.5 times in execution time.
 \par
 
 
-\kento{Let us change contribution later}
 Our contributions can be summarized as following:
 \begin{itemize}
 	\item A cloud-based burst buffer system accelerating data intensive

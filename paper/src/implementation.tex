@@ -140,7 +140,6 @@ In order to master node majorly maintains following two data structures:
 
 Since only master has the global knowledge of file chunk placement, client must connect to master
 to get these information.
-\xtq{same file or different file}
 However, in such master-worker model, master is easy to become a bottleneck of the whole system,
 thus we have to minimize the master involvement in file operation, client asks master about the
 file meta data, including the chunk placement information, then client uses these information and
@@ -160,11 +159,7 @@ data, communicate with master nodes and burst buffer nodes, including send I/O r
 receive I/O data.
 Figure.~\ref{implementaion:client_daemon} is an illustration of client daemon inside client nodes
 and buffer queue in I/O burst nodes.
-Applications changes data with client daemon by using mmap.
-\kento{Q5: Is a client daemon really running on each client node ? Because you
-say ``daemon'', I understand the daemon process is a different process to the
-application's process. Is it true ? Please
-send me an email to answer as Q5} Figure.~\ref{implementaion:client_daemon}
+Applications changes data with client daemon by using mmap.Figure.~\ref{implementaion:client_daemon}
 is an illustration of client daemon inside client nodes and buffer queue in burst buffer nodes.
 Users don't know and should not know the information like IP address of master nodes,  client daemon
 is used to hide these information from users.
@@ -209,7 +204,7 @@ for unbuffered file, master record the file information, and assign a file id, a
 file id to client daemon.
 
 After file opened, applications can use file id to send read or write request.
-In our prototype, since the master need to manage the block allocate and de-allocate operation, all
+In our prototype, since the master need to manage the chunk allocate and de-allocate operation, all
 the read, write request should send to master.
 When master receive the request, for file opened for reading
 request for the first time, master get the file size from shared storage, and assign several burst
