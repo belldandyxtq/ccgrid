@@ -25,7 +25,7 @@ throughput of the target compute node, $T_{a}(i)$, becomes
 $T_{a}(i)=\frac{T_{b}}{i+1}$ where $T_{b}$ is a peak I/O bandwidth of a single
 burst buffer node. Thus, overall average I/O throughput, $T$, can be computed as:
 \begin{equation}
-\text{T}=\sum_{i=0}^{n-1} P_{i} \times T_{a}(i)\label{model:throughput}
+T=\sum_{i=0}^{n-1} P_{i} \times T_{a}(i)\label{model:throughput}
 %\text{T}=\frac{T}{e} 
 %e=1+\frac{n-1}{m}
 \end{equation}
@@ -35,7 +35,7 @@ Hence, the $P_{i}$ can be computed as:
 
 
 \begin{equation}
-\text{P}_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
+P_i=\frac{\dbinom{n-1}{i}(m-1)^{n-i-1}}{m^{n-1}}
 \end{equation}
 
 where $m$ denotes total number of burst buffer nodes. 
@@ -43,13 +43,15 @@ By using the model, we can estimate the throughput of applications in
 environments where multiple compute nodes are running and randomly accessing the
 burst buffer nodes.
 
-\begin{comment}
+
 \subsection{Modeling of Cost}
+\label{ssec:cost_model}
 In addition to I/O throughput of the cloud-based burst buffers, another
 important aspect is the cost.
 While I/O throughput can be accelerated by burst buffers, the cost can be
 increased because of additional nodes for burst buffers.
-To estimate the cost, we also model the cost of the cloud-based burst buffers.
+To estimate the cost, we also model the cost of the cloud-based burst buffers
+based on the AMAZON EC2 cost model.
 
 When we run an application using $\acute{n}$ number of compute nodes in a
 environment where $b$ number of burst buffers are used, the cost is charged for
@@ -58,15 +60,15 @@ Thus, the total cost, $C_{total}$ can be computed as:   If a \emph{target}
 compute node
 \begin{equation}
 C_{total} = \{　\acute{n} \times \text{C}_{cn}+ (b \times \text{C}_{bn} \times
- + 1 \times C_{mn}) \times \frac{\acute{n}}{n} \}\times etime
++ 1 \times C_{mn}) \times \frac{\acute{n}}{n} \}\times etime
 \end{equation}
 
 where $C_{cn}$, $C_{bn}$ and $C_{mn}$ denote costs per second (${\it \$} /sec$)
 of a compute node, a burst buffer node, and a metadata server node
 respectively, $etime$ denotes the execution time of the application. If we
-use the same instances for there nodes, the cost becomes 
+use the same instances for there nodes, the cost becomes
 $C_{cn}=C_{bn}=C_{mn}$.
 For the fairness of the cost, the cost for burst buffers is charged depending on the number of compute nodes used by the application in this model. By using this
-model, we estimate the overall cost of an application run. 
-\end{comment}
+model, we estimate the overall cost of an application run.
+
 

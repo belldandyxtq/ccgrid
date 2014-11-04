@@ -65,7 +65,7 @@ single compute node access to our system.
 Figure~\ref{evaluation:one user performance} shows sequential read and write
 throughputs when a single compute node access to the burst buffers, and S3
 under increasing number of burst buffer nodes. All I/O data are distributed
-across all I/O nodes.
+across all burst buffer nodes.
 
 As shown in the figure, by using the cloud-based burst buffer, we can 
 achieve 550MB/s for both read and write.
@@ -91,7 +91,8 @@ buffer nodes.
 Figure~\ref{evaluation:multiple user performance} shows the aggregated
 I/O throughput of each method. In this experiment, the number of compute nodes
 and burst buffer nodes are same, and each client independently
-access each I/O node, and one I/O nodes buffer all the I/O data for a client.
+access each burst buffer node, and one burst buffer node store all the I/O
+data for a client.
 
 First we see the result of traditional I/O in which all compute nodes
 accesses to S3 concurrently.
@@ -134,41 +135,71 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{img/workflows}
-\caption{Simulation on real applications}
+\caption{Simulations: Execution times of real applications}
 \label{evaluation:simulation result montage}
 \end{figure}
 
  In this section, we simulate the execution of the three applications shown in
  Table.~\ref{background:work flow applications} on our prototype system.
- Since the I/O from other compute nodes will affect the I/O throughput of one compute node,
- in order to simulate the execution in a real environment, we use model shown in section
- \ref{sec:modeling}.
- In this simulation, we use 8 burst buffer nodes, as well as 8 compute nodes, and use
- \ref{model:throughput} to get the throughput achieve by one client with the affect of other 7 compute nodes.
- In Figure~\ref{evaluation:simulation result montage} shows the simulation result of three real
- applications on one compute node with 8 burst buffer nodes, and affected by other 7 compute nodes.
+ Since the I/O from other compute nodes will affect the I/O throughput of a
+ compute node, we simulate the execution targeting a real cloud environment by
+ using the model shown in Section \ref{sec:modeling}.
+ In this simulation, we use 8 burst buffer nodes, as well as 8 compute nodes,
+ and compute the I/O throughput achieved by one compute node based on the model.
+ Figure~\ref{evaluation:simulation result montage} shows the simulation results
+ of three real applications on one compute node with 8 burst buffer nodes, and
+ other 7 compute nodes. 
+ %Figure~\ref{evaluation:simulation result montage} also shows a simulation
+ % result of the execution of the three applications on one compute node on Amazon S3 without using burst buffer nodes, and
+ %affected by other 7 compute nodes.
  
- Figure~\ref{evaluation:simulation result montage} also shows a simulation result of the execution
- of the three applications on one compute node on Amazon S3 without using burst buffer nodes, and
- affected by other 7 compute nodes.
- 
- From Figure~\ref{evaluation:simulation result montage} we can see that Montage achieves a great
- speed up by using our proposal system, however other two applications, POV-Ray and Supernovae only
- achieve a little speed up.
+ As shown in the figure, we  can see that Montage achieves a great speed up by
+ using our proposal system, however the other two applications, POV-Ray and
+ Supernovae only achieve a little speed up.
  The reason is can be found from Table~\ref{evaluation:application execution detail}.
  From Table~\ref{evaluation:application execution detail}, we can see that Montage has a different
- characteristic compared to other two applications.
- Montage read and write a large amount of data, but compute only for a short time.
- However when we look at other two applications, POV-Ray has a small I/O data size, but a long
- computation time; Supernovae has the largest I/O data size, but the computation time is the longest
- too.
- 
+ characteristic compared to the other two applications.
  As we mentioned before, our proposal system can burst applications which have a largest I/O data
- size.
- So Montage achieved a large speed up on our proposal system, up to 1.5 times, on the contrary,
- POV-Ray has a heavy computation but a small I/O size, so it can only achieved a small speed up.
+ size, so Montage achieves a large speed up on our proposal system, up to 2.5
+ times.
+ On the contrary, POV-Ray has a heavy computation but a small I/O size, so it
+ can only achieve a small speed up.
  In Supernovae case, although the I/O time is reduced by using our proposal system, compare to the
  computation time, the speed up is still small.
+ However, because our cloud-based burst buffers accelerate I/O having temporal
+ locality, the I/O performance itself remarkably is improved as shown in Figure
+ \ref{evaluation:one user performance} and \ref{evaluation:multiple user
+ performance}.
+ 
+ \begin{figure}
+\centering
+\includegraphics[width=8.5cm]{img/cost-2}
+\caption{Simulations: Monetary cost for the executions}
+\label{evaluation:simulation result cost}
+\end{figure}
+ 
+In addition, we found that if the temporal I/O locality is high as in Montage,
+the monetary cost is also improved.
+Figure \ref{evaluation:simulation result cost} shows the relative monetary cost
+for the execution when the cost of execution without burst buffers, $S3$, is 1.
+The estimated costs are computed based on our cost modes in Section
+\ref{ssec:cost_model}. As shown in the figure, for Montage, 
+we can achieve more that two times of saving of the monetary cost in addition to
+the I/O performance. Although, the environment with burst buffers use twice
+numbers of the Amazone EC2 instances, i.e., additional 8 burst buffers to 8
+compute nodes, the execution is cost effective because the execution time can be
+reduced by more than two times with our cloud-based burst buffers.
+On the other hand, the costs of POV-Ray and Supernovae does not improved. 
+This is because these applications conduct much more computation rather than I/O
+operations.
+If we can dynamically change the number of burst buffers during execution
+depending on I/O time and the computation time, then we
+can increase the I/O throughput while minimizing the monetary cost. In addition, if we dynamically
+change I/O destinations between burst buffers and S3, we can optimize both I/O
+throughput and the monetary cost depending on types of applications.
+If we analysis the I/O patterns based on MUSE, and optimize the workloads. We
+will consider the I/O tuning in future work.
+
 % First we make several assumptions:
 % \begin{itemize}
 %   \item Master distribute I/O data of applications over all I/O nodes evenly, and applications

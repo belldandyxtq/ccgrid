@@ -69,7 +69,7 @@ Actually, since many jobs use multiple nodes work together and the output of
 some nodes can be the input of the others, so for most cases, output data will
 still be buffered in buffer queue until the whole job finished.
 As for reading, if that file is stored in the buffer queue, compute nodes can
-read from I/O nodes through interconnection network.
+read from burst buffer nodes through interconnection network.
 In other cases (buffer queue is full when issue a write request or requested
 file is not stored in buffer queue when issue a read request we call it cache
 miss), a read from or write back operation described below will be executed.

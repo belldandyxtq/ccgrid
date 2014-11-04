@@ -6,12 +6,13 @@ We implement a prototype of our proposal system, and evaluate it on Amazon EC2/S
 We achieve an up to 3 times speed up for a single user in reading, as well as 4 times speed
 up for the whole system in writing.
 We also simulate the execution of three real data intensive applications on our proposal system in
-a real environment, and achieved up to 1.5 times speed up in the execution time of real application.
+a real environment, and achieved up to 2.5 times speed up in the execution time
+of real application.
 
 However since this is a prototype of our proposal system, there are still many limitation in the
 system, may leading to under utilization of node bandwidth, and master node may easily become the
 bottleneck of the whole system.
 Also there are many points can be improved and can be added to the implementation, including the
-data layout of the I/O node in order to make load balance, and dynamic load balance in node addition
-and deletion.
+data layout of the burst buffer node in order to make load balance, and dynamic
+load balance in node addition and deletion.
 For the future work, we will try to improve our prototype.
