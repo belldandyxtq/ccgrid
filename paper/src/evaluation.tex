@@ -1,8 +1,13 @@
 \section{evaluation}
 \label{sec:evaluation}
 
-In this section we introduce the evaluation result of our prototype implementation in Amazon EC2 public cloud.
-The cloud environment is shown as Table.\ref{evaluation:amazon_environment}
+To validate the effectiveness of cloud-based burst buffers, 
+we conduct several evaluations and simulations in the Amazon EC2 public cloud.
+For compute nodes, the burst buffer nodes, and the metadata server, 
+we use Amazon EC2 instances shown in Table~\ref{evaluation:amazon_environment}.
+All the compute nodes, burst buffer nodes and metadata server node connects with
+interconnection network inside Amazon EC2 in the region.
+
 \begin{table}[h]
 \centering
 \begin{tabular}{|c|c|}
@@ -10,118 +15,128 @@ The cloud environment is shown as Table.\ref{evaluation:amazon_environment}
 \cellcolor{lightgray} Region				&		Tokyo		\\
 \hline
 \cellcolor{lightgray} Instance Type		&		m3.xlarge	\\
+\hline
 \cellcolor{lightgray} vCPUs				&		4			\\
+\hline
 \cellcolor{lightgray} ECUs				&		13			\\
+\hline
 \cellcolor{lightgray} Memory				&		15GiB		\\
+\hline
 \cellcolor{lightgray} Instance Storage	&		2*40GB(SSD)	\\
+\hline
 \cellcolor{lightgray} Network Performance	&		High		\\
+\hline
 \end{tabular}
 \caption{evaluation environment}
 \label{evaluation:amazon_environment}
 \end{table}
 
-\begin{table}[th]
-\centering
-\begin{tabular}{|c|p{150pt}|}
-\hline
-CPU					&		Intel\textregistered Core\texttrademark i7-3770K CPU @ 3.50GHz\\\hline
-Memory				&		16GB\\\hline
-Storage				&		Crucial m4 CT256M4SSD3 (256GB, mSATA)(Peak read: 500 MB/s, Peak write:260MB/s)*8\\\hline
-RAID Card 			&		Adaptec ASR-7805Q Single\\\hline
-RAID				&		Raid 0\\
-\hline
-\end{tabular}
-\caption{storage environment}
-\label{evaluation:storage_environment}
-\end{table}
+% \begin{table}[th]
+% \centering
+% \begin{tabular}{|c|p{150pt}|}
+% \hline
+% CPU					&		Intel\textregistered Core\texttrademark i7-3770K CPU @ 3.50GHz\\\hline
+% Memory				&		16GB\\\hline
+% Storage				&		Crucial m4 CT256M4SSD3 (256GB, mSATA)(Peak read: 500 MB/s, Peak write:260MB/s)*8\\\hline
+% RAID Card 			&		Adaptec ASR-7805Q Single\\\hline
+% RAID				&		Raid 0\\
+% \hline
+% \end{tabular}
+% \caption{storage environment}
+% \label{evaluation:storage_environment}
+% \end{table}
 
-Here vCPUs means the number of virtual CPU in instance, and one ECU provides the equivalent CPU
-capacity of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor.
+Here, vCPUs means the number of virtual CPUs in the instance, 
+and a single ECU~(Amazon EC2 Compute Unit) provides the equivalent CPU capacity
+of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor \kento{???}.
+For the shared cloud storage, we use Amazon S3 mounted by sshfs\cite{sshfs}.
 
-For the storage system, we used a machine inside our lab, the details is shows in
-Table.~\ref{evaluation:storage_environment}.
-
-All the compute nodes, I/O nodes and master node connect with interconnection network inside Amazon
-EC2, and mount storage system by sshfs\cite{sshfs} via Internet.
-
-We use gxp\cite{gxp} to distribute work flow over compute nodes.
-
-\subsection{One User Performance}
+\subsection{I/O Performance of A single compute node}
 
 \begin{figure}
 \centering
-\includegraphics[width=8.5cm]{img/one_client.pdf}
+\includegraphics[width=8.5cm]{img/one_client-2.pdf}
 \caption{One User Performance}
 \label{evaluation:one user performance}
 \end{figure}
+To illustrate how much our cloud-based burst buffer system will improve I/O
+performance of a single compute node, we evaluate the I/O performance when a
+single compute node access to our system.
+Figure~\ref{evaluation:one user performance} shows sequential read and write
+throughputs when a single compute node access to the burst buffers, and S3
+under increasing number of burst buffer nodes. All I/O data are distributed
+across all I/O nodes.
 
-First we measure the performance of our prototype for only one user, and show how our system
-will affect one user performance.
-In this experiment, the number of client is fixed to one, and measure
-the sequential read and write performance for different number of I/O nodes.
-All I/O data are distributed among all I/O nodes.
-Figure~.\ref{evaluation:one user performance} shows one user performance.
-As we know, one thread I/O is difficult to achieve the full throughput on Internet, we can see from
-Figure.~\ref{evaluation:one user performance} that without I/O node, applications can only achieve a
-throughput under 20MB/s in reading and under 80MB/s in writing.
+As shown in the figure, by using the cloud-based burst buffer, we can 
+achieve 550MB/s for both read and write.
+When we read data from burst buffers, data is sent from burst buffers to compute
+nodes, and vice versa in writing data. Thus, the both performances are identical
+and shown in the single bar. On the other, we can see that applications
+can only achieve as 100MB/s for read, and 65MB/s for write without our
+cloud-based burst buffers. By using our cloud-based burst buffers, 
+we can remarkebly increase performance of I/O having temporal
+locality.
 
-However by using our system the read throughput increasing as the number of I/O nodes, and can
-achieve about 8 times faster than the throughput without I/O nodes.
-For writing throughput, the interconnection throughput is different from Internet throughput, it can
-achieve full throughput even with one thread, but the throughput is limited by the client node
-throughput which is also 1Gbps(135MB/s).
-
-\subsection{Multiple Users Performance}
+\subsection{Scalability of The Cloud-based Burst Buffers}
 
 \begin{figure}
 \centering
-\includegraphics[width=8cm]{img/multiple_client.pdf}
+\includegraphics[width=8.5cm]{img/multiple_client-2.pdf}
 \caption{Multiple User Performance}
 \label{evaluation:multiple user performance}
 \end{figure}
+Next, we evaluate the scalability of the
+cloud-based buffer buffers by increasing both compute nodes and burst
+buffer nodes.
+Figure~\ref{evaluation:multiple user performance} shows the aggregated
+I/O throughput of each method. In this experiment, the number of compute nodes
+and burst buffer nodes are same, and each client independently
+access each I/O node, and one I/O nodes buffer all the I/O data for a client.
 
-In the second experiment, we measured the throughput of multiple clients.
-It shows the overall throughput the whole system can achieve.
-To simplify the experiment, we assume that one client connects to only one I/O nodes, and one I/O
-nodes buffer all the I/O data for a client.
-Figure.~\ref{evaluation:multiple user performance} shows the overall throughput of the whole system.
-First we see the result of traditional solution in which all compute nodes connect to shared storage
-and read write data concurrently.
-However, since the connection bandwidth of shared storage, which is the Internet bandwidth is only
-1Gbps, the overall throughput grows at first, and quickly hit the limitation.
+First we see the result of traditional I/O in which all compute nodes
+accesses to S3 concurrently.
+However, since the bandwidth of shared storage is is limited, the overall
+throughput does not scale well. On the other hands, our system is fairly
+scalable because the total bandwidth grows as the burst buffer nodes increase.
+%  Then, we found thatng our system.
+% Since all the data are stored on the shared storage, and need to
+% be transferred via Internet, the read throughput doesn't change by using I/O nodes.
+% However when we look at the write throughput, it shows a strong scalability, and achieved 7 times
+% improvement with only 4 I/O nodes.
 
-Then we look at the result using our system.
-Since all the data are stored on the shared storage, and need to
-be transferred via Internet, the read throughput doesn't change by using I/O nodes.
-However when we look at the write throughput, it shows a strong scalability, and achieved 7 times
-improvement with only 4 I/O nodes.
+\subsection{Simulation for Real applications}
 
-\subsection{Simulation for Applications}
-
-\begin{figure}
-\centering
-\includegraphics[width=8cm]{img/simulation_throughput}
-\caption{read write throughput of one compute node with 8 I/O nodes}
-\label{evaluation:simulation throughput}
-\end{figure}
 
 \begin{table}
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-						&	Montage		&		Pov Ray		&		Supernovae		\\\hline
-total I/O size(MB)		&	2132.437508	&		748.916378	&		5203.214882		\\\hline
-total read size(MB)		&	1558.082295	&		681.081228	&		3283.723596		\\\hline
-total write size(MB)	&	574.355213	&		67.83515	&		1919.491286		\\\hline
-read locality size(MB)	&	1500.107713	&		678.155227	&		2429.888509		\\\hline
-compute time (s)		&	18.680705	&		1150.97979	&		1351.987268		\\
+% 						&	Montage		&		Pov Ray		&		Supernovae		\\\hline
+% total I/O size (MB)		&	2132.437508	&		748.916378	&		5203.214882		\\\hline
+% total read size(MB)		&	1558.082295	&		681.081228	&		3283.723596		\\\hline
+% total write size(MB)	&	574.355213	&		67.83515	&		1919.491286		\\\hline
+% read locality size(MB)	&	1500.107713	&		678.155227	&		2429.888509	
+% \\\hline compute time (s)		&	18.680705	&		1150.97979	&		1351.987268		\\
+\rowcolor{darkgray} 						&	Montage		&		POV-Ray		&		Supernovae		\\\hline
+\cellcolor{lightgray} Total I/O size (GB)	&	2.13	&		0.749	&		5.20		\\\hline
+ \cellcolor{lightgray}Total read size(GB)	&	1.56	&		0.681	&		3.28		\\\hline
+ \cellcolor{lightgray}Total write size(GB)	&	0.574	&		0.067	&		1.92		\\\hline
+ \cellcolor{lightgray}Temporal I/O locality size(GB)	&	2.07	&		0.745	&		4.35	
+ \\\hline \cellcolor{lightgray}Compute time (s)		&	18.7	&		1151.0	&	
+ 1352.0		\\
 \hline
 \end{tabular}
 \caption{Applications Execution detail}
 \label{evaluation:application execution detail}
 \end{table}
 
-\xtq{define what and why is $T$}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{img/workflows}
+\caption{Simulation on real applications}
+\label{evaluation:simulation result montage}
+\end{figure}
 
  In this section, we simulate the execution of the three applications shown in
  Table.~\ref{background:work flow applications} on our prototype system.
@@ -167,27 +182,27 @@ Table~.\ref{evaluation:application execution detail} shows the execution detail 
 applications.
 
 
-\begin{figure}
-\centering
-\includegraphics[width=8cm]{img/simulation_montage}
-\caption{simulation result of montage}
-\label{evaluation:simulation result montage}
-\end{figure}
-
-
-\begin{figure}
-\centering
-\includegraphics[width=8cm]{img/simulation_povray}
-\caption{simulation result of pov ray}
-\label{evaluation:simulation result pov ray}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=8cm]{img/simulation_supernovae}
-\caption{simulation result of supernovae}
-\label{evaluation:simulation result supernovae}
-\end{figure}
+% \begin{figure}
+% \centering
+% \includegraphics[width=8cm]{img/simulation_montage}
+% \caption{simulation result of montage}
+% \label{evaluation:simulation result montage}
+% \end{figure}
+% 
+% 
+% \begin{figure}
+% \centering
+% \includegraphics[width=8cm]{img/simulation_povray}
+% \caption{simulation result of pov ray}
+% \label{evaluation:simulation result pov ray}
+% \end{figure}
+% 
+% \begin{figure}
+% \centering
+% \includegraphics[width=8cm]{img/simulation_supernovae}
+% \caption{simulation result of supernovae}
+% \label{evaluation:simulation result supernovae}
+% \end{figure}
 
 As we can see from Figure.~\ref{evaluation:simulation result montage},\ref{evaluation:simulation
 result pov ray},\ref{evaluation:simulation result supernovae}, by using our system, all three

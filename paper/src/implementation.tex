@@ -59,69 +59,71 @@ without knowing the underlying operations.
 % 	master and burst buffer nodes, in order to hide architecture detail from user.
 % \end{itemize}
 % 
-% The shared storage system are mounted on both master and burst buffer nodes, both of master and
-% burst buffer nodes have the same assess permission to the shared file system.
+% The shared storage system are mounted on both master and burst buffer nodes,
+% both of master and burst buffer nodes have the same assess permission to the shared file system.
 
 In order to validate the effectiveness of the cloud-based burst buffer system in
-real environments, we implement a prototype of the system.
-Figure \ref{implemetation:overview of prototype} shows the design of cloud-based
-burst buffers.
-\kento{\par ==== Start from here tomorrow == \par}
-In our design, there are several global data such as total number of
-burst buffer nodes, buffered file information need to be shared between all nodes.
-And since in our proposal architecture, numbers of burst buffer nodes can be dynamically determined,
-a global scheduler is needed to decide when and how nodes are added and removed, these decision
-should be made based on global work load and local work load.
-Also a scheduler is needed to handle the operation like re-balance of buffered data when nodes
-addition, and data write back when nodes deletion.
+real environments, we implement a prototype of the system.In our design,
+because the number of burst buffer nodes can be dynamically determined, a central management is required to manage when nodes are added and
+removed to re-balance the buffered data. In addition, buffered data is
+distributed across burst buffer nodes, metadata also needs to be managed by a
+control management.For the above reasons, we employ a master-worker model, 
+a master is to manage the global information, and handle I/O requests form
+compute nodes, and also serve as a scheduler for data placement on burst
+buffers.
 
-For above reasons in this implementation, we adopted master-worker model, a master is designed to
-store global information and interactive with client daemon, as well as serve as a scheduler.
-The architecture of our prototype is described as Figure \ref{implemetation:overview of prototype}
-
-In our architecture, there are three types of nodes:
+The architecture of our prototype is illustrated as
+Figure~\ref{implemetation:overview of prototype}.
+In our architecture, there are three
+types of nodes:
 \begin{itemize}
-	\item A master node manages all burst buffer nodes information, maintains a set of buffered file
-	meta data, handles operation like burst buffer node addition and deletion etc., and interact with
-	clients.
-	\item There are several burst buffer nodes response for actually storing data.
-	\item A daemon runs on each client machine serving for communication with
-	master and burst buffer nodes, in order to hide architecture detail from user.
+	\item Master node: A node managing burst buffer node information for adding and
+	removing, maintaining metadata of buffered data, and handling I/O requests
+	from compute nodes
+	\item Burst buffer node: nodes providing burst buffers using their
+	in-memory space
+	\item Client daemon: A process running on each compute node, and
+	reading or writing data from or to burst buffers based on metadata managed on
+	the master node.
 \end{itemize}
-
-The shared storage system are mounted on both master and burst buffer nodes, both of master and
-burst buffer nodes have the same assess permission to the shared file system.
+%The shared storage system are mounted on both master and burst buffer nodes,
+% both of master and burst buffer nodes have the same assess permission to the shared file system.
 
 \subsection{File Chunk}
 In our implementation, files are usually stored in more than one burst buffer node depends on the files'
 size and numbers of burst buffer nodes available.
-\xtq{detail　chunk size}
-Files are divided into dynamic determined-size \emph{chunks}, each burst buffer node store one chunk.
-\kento{I think we should use another word instead of ``mutable''.
-``configurable'' ?, ``dynamically changeable'', ``dynamically
-optimized size ?'' ?}
-Such one burst buffer node one chunk design simplified our data layout design, and operations in
-burst buffer nodes addition and deletion.
-\kento{I can not understand this. You mean if an application write X bytes
-of data to N of burst buffer nodes, the system divide the data into N of chunks
-with X/N bytes of size, OR totally mutable-size for each chunk ? Please send me
-an email to answer as Q1} \kento{Q2: Given N of burst buffer nodes, can the
-system divide the file into M (< N) ? Please send me an email to answer as Q2} For each chunk
-we adopted a \emph{dirty flag}, in order to decide whether this chunk has been modified.
-In write back phase, only the modified chunk needs to be written back to storage.
-This dirty flag can reduce the write back data size and thus reduce the Internet congestion.
+Files are divided into dynamically determined-size of \emph{chunks} depending
+on the sizes of the files, and stored across burst buffer nodes.
+% Such one burst buffer node one chunk design simplified our data layout design, and operations in
+% burst buffer nodes addition and deletion.
+% \kento{I can not understand this. You mean if an application write X bytes
+% of data to N of burst buffer nodes, the system divide the data into N of chunks
+% with X/N bytes of size, OR totally mutable-size for each chunk ? Please send me
+% an email to answer as Q1} \kento{Q2: Given N of burst buffer nodes, can the
+% system divide the file into M (< N) ? Please send me an email to answer as Q2} 
+Because applications usually generate various sizes of files, data placement
+management is important to make use of the memory space.
+Since chunk sizes are dynamically determined, our design can avoid
+the disadvantage of memory waste in fixed-size chunks, and allocate
+memory just needed for buffing data.
+%\kento{I can not understand this because of Q1}
+% However such one burst buffer node one chunk design and mutable size has some disadvantages.
+% First master must maintain the chunk size of each file, this put a burden on master.
+% Second, for a large file the chunk size will become very large, cause a coarse-grained write back
+% control, and reduce the performance gained by dirty flag.
+% \kento{Q3: I can not understand why, because the chunk size is mutable. Please
+% send me an email to answer as Q3} Finally, since the chunk size is decided by
+% file size, and one burst buffer node store only one chunk, it is difficult to change buffered file size.
 
-Applications usually generate various sizes of files, since in our architecture, memory is precious
-resources, more memory means we can buffer more files, mutable size chunk design avoid the
-disadvantage of memory waste in fixed-size chunk design, and enable us just to allocate requested size of memory.
-\kento{I can not understand this because of Q1}
-However such one burst buffer node one chunk design and mutable size has some disadvantages.
-First master must maintain the chunk size of each file, this put a burden on master.
-Second, for a large file the chunk size will become very large, cause a coarse-grained write back
-control, and reduce the performance gained by dirty flag.
-\kento{Q3: I can not understand why, because the chunk size is mutable. Please
-send me an email to answer as Q3} Finally, since the chunk size is decided by
-file size, and one burst buffer node store only one chunk, it is difficult to change buffered file size.
+Because our cloud-based burst buffer system is served as two-level hierarchical
+storage, the system need to manage consistency between files on burst buffers
+and shared cloud storage. 
+To manage the consistency, we include \emph{dirty flag} in metadata of each
+chunk so that modified chunk can be written back to storage.
+%This dirty flag can reduce the write back data size and thus reduce the
+%Internet congestion.
+
+
 
 \subsection{Master Node}
 In our master-worker node model, master node is the supervisor of the entire system,

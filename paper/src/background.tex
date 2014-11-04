@@ -101,24 +101,42 @@ Cloud computing can have following benefits:
 % network) and storage(S3) ? People will think this comparison is unfair, and no
 % meaning unless you mention that. This subsection looks weird to me because this
 % section does not have any ``topic sentence'' and ``so what ?'' sentence}
+% 
+% \begin{figure}[h]
+% \centering 
+% \subfigure[Amazon S3 read/write (N-1)]{
+% \label{background:amazon s3 read write same file}
+% \includegraphics[width=4.1cm]{img/s3_read_write_same_file}}
+% % \subfigure[Amazon S3 write (same file)]{
+% % \label{background:amazon s3 write same file}
+% % \includegraphics[width=4cm]{img/s3_write_same_file}}
+% % \subfigure[Amazon S3 read (different file)]{
+% % \label{background:amazon s3 read different file}
+% % \includegraphics[width=4cm]{img/s3_read_different_file}}
+% \subfigure[Amazon S3 read/write (N-N)]{
+% \label{background:amazon s3 read write different file}
+% \includegraphics[width=4.1cm]{img/s3_read_write_different_file-2}}
+% \caption{Amazon S3 I/O throughput}
+% \label{background:amazon s3 throughput}
+% \end{figure}
+% 
 
-\begin{figure}[h]
-\centering 
-\subfigure[Amazon S3 read/write (N-1)]{
+\begin{figure}[t]
+\centering
 \label{background:amazon s3 read write same file}
-\includegraphics[width=4.1cm]{img/s3_read_write_same_file}}
-% \subfigure[Amazon S3 write (same file)]{
-% \label{background:amazon s3 write same file}
-% \includegraphics[width=4cm]{img/s3_write_same_file}}
-% \subfigure[Amazon S3 read (different file)]{
-% \label{background:amazon s3 read different file}
-% \includegraphics[width=4cm]{img/s3_read_different_file}}
-\subfigure[Amazon S3 read/write (N-N)]{
-\label{background:amazon s3 read write different file}
-\includegraphics[width=4.1cm]{img/s3_read_write_different_file}}
-\caption{Amazon S3 I/O throughput}
-\label{background:amazon s3 throughput}
+\includegraphics[width=8cm]{img/s3_read_same_file-2}
+\caption{Amazon S3 read/write (N-1)}
 \end{figure}
+
+\begin{figure}[t]
+\label{background:amazon s3 read write different file}
+\includegraphics[width=8cm]{img/s3_read_write_different_file-2}
+\caption{Amazon S3 I/O throughput (N-N)}
+\end{figure}
+
+
+
+
 
 The computational power in clouds enables the users to run high performance
 scientific applications faster than ever, which have been making cloud
