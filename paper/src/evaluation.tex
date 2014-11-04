@@ -143,8 +143,8 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
  Since the I/O from other compute nodes will affect the I/O throughput of one compute node,
  in order to simulate the execution in a real environment, we use model shown in section
  \ref{sec:modeling}.
- In this simulation, we use 8 burst buffer nodes, as well as 8 compute nodes, and use \ref{} to get
- the throughput achieve by one client with the affect of other 7 compute nodes.
+ In this simulation, we use 8 burst buffer nodes, as well as 8 compute nodes, and use
+ \ref{model:throughput} to get the throughput achieve by one client with the affect of other 7 compute nodes.
  In Figure~\ref{evaluation:simulation result montage} shows the simulation result of three real
  applications on one compute node with 8 burst buffer nodes, and affected by other 7 compute nodes.
  
@@ -165,8 +165,8 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
  
  As we mentioned before, our proposal system can burst applications which have a largest I/O data
  size.
- So Montage achieved a large speed up on our proposal system, on the contrary, POV-Ray has a heavy
- computation but a small I/O size, so it can only achieved a small speed up.
+ So Montage achieved a large speed up on our proposal system, up to 1.5 times, on the contrary,
+ POV-Ray has a heavy computation but a small I/O size, so it can only achieved a small speed up.
  In Supernovae case, although the I/O time is reduced by using our proposal system, compare to the
  computation time, the speed up is still small.
 % First we make several assumptions:
