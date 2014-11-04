@@ -136,8 +136,6 @@ Cloud computing can have following benefits:
 
 
 
-
-
 The computational power in clouds enables the users to run high performance
 scientific applications faster than ever, which have been making cloud
 computing attractive to large scale scientific applications.
@@ -246,7 +244,7 @@ files, offset of file, and the size, so that we can figure out temporal I/O loca
 Figure \ref{background:data locality} shows the temporal I/O locality in
 the different data intensive applications assuming the buffer size is
 enough to accommodate the intermediate data.
-\kento{Will change Y. in the figure} 
+%\kento{Will change Y. in the figure} 
 The buffered I/O ratio, $R_{buf}$, means
 ratio of read and write operations, which can read from or writ to the buffer.
 The ratio can be formulated as:
@@ -260,7 +258,7 @@ shows high buffered I/O rations. For example, The rations of Montage and POV-Ray
 are over 95\%, and the ration of supernovae is over 80\%.
 Because we assume enough size of the buffer size, all write operations data can
 be buffered, i.e., $w_{b} = w_{t}$.
-\kento{XU: Is this correct ?}
+%\kento{XU: Is this correct ?}
  In addition, the three applications
 read all data which is written by another process as intermediate data, which
 increases the temporal I/O locality.
@@ -270,8 +268,7 @@ locality because these applications usually write checkpoints for fault
 tolerance. 
 In checkpoint/restart, applications read the \emph{lastest} checkpoint when
 restarting. The I/O pattern increases temporal I/O locality. 
-In other data intensive applications \ldots, \kento{XU: please try to find
-citation again.}
+%\kento{XU: please try to find citation again.}
 Thus, improving read and write performance in $r_{b}$, $w_{b}$ can accelerate
 these data intensive workloads.
 
@@ -381,7 +378,7 @@ and high scalability on the fly.
 % network) and storage(S3) ? People will think this comparison is unfair, and no
 % meaning unless you mention that. This subsection looks weird to me because this
 % section does not have any ``topic sentence'' and ``so what ?'' sentence}
-\subsection{Challenges in Cloud-based Burst Buffers}
-\kento{exploiting network for I/O, multiple applications, limited buffer size}
-\kento{focus is modeling because \ldots}
+% \subsection{Challenges in Cloud-based Burst Buffers}
+% \kento{exploiting network for I/O, multiple applications, limited buffer size}
+% \kento{focus is modeling because \ldots}
 
