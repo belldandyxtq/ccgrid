@@ -190,7 +190,7 @@ send to applications.
 
 \begin{figure}
 \centering
-\includegraphics[width=8cm]{img/file_operation}
+\includegraphics[width=8cm]{img/file_operation-2}
 \caption{Details of File Operation}
 \label{implementation:file operation}
 \end{figure}
@@ -222,28 +222,28 @@ buffer nodes in the map, and start I/O with these burst buffer nodes.
 In order to monitor workload of each burst buffer nodes, and make load balanced, burst buffer nodes send a signal to
 master at the start and the end of each data transfer.
 
-\subsection{Limitation}
-
-Since this is a prototype of our proposal system, there are several limitations.
-First, in this prototype implementation, both master node and burst buffer nodes use one thread, it means
-there is only one request can be responded at any time.
-this design may cause master easily becoming a bottleneck when the number of client increase.
-Also, since at any time one burst buffer node can transfer data with only one client, when the bandwidth of
-burst buffer node larger than compute node, it will cause the burst buffer node under utilization.
-However, there are some difficulties to change to a multiple threads version, for example, there
-is a dependency between read from shared storage and send to compute nodes request, burst buffer nodes should
-block the reading request from compute nodes until the read from shared storage finished also
-synchronization is needed among read and write operations.
-
-Second, one burst buffer node one data chunk design simplified master's design, but it also brings several
-limitations. It is difficult to change the file size after buffered it, as well as it reduce the
-benefit gain by using dirty flag.
-
-Third, in the node addition and deletion, there is no load balance in our prototype.
-Without load balance, after node added into the system, it needs a long time to achieve speed up.
-Also in the node deletion, file write back and re-buffer are required.
-
-In this paper, our aim is to validate effectiveness of burst buffers in
-cloud.
-Although we have these limitation in prototype, we can still show the effectiveness of burst
-buffers.
+% \subsection{Limitation}
+% 
+% Since this is a prototype of our proposal system, there are several limitations.
+% First, in this prototype implementation, both master node and burst buffer nodes use one thread, it means
+% there is only one request can be responded at any time.
+% this design may cause master easily becoming a bottleneck when the number of client increase.
+% Also, since at any time one burst buffer node can transfer data with only one client, when the bandwidth of
+% burst buffer node larger than compute node, it will cause the burst buffer node under utilization.
+% However, there are some difficulties to change to a multiple threads version, for example, there
+% is a dependency between read from shared storage and send to compute nodes request, burst buffer nodes should
+% block the reading request from compute nodes until the read from shared storage finished also
+% synchronization is needed among read and write operations.
+% 
+% Second, one burst buffer node one data chunk design simplified master's design, but it also brings several
+% limitations. It is difficult to change the file size after buffered it, as well as it reduce the
+% benefit gain by using dirty flag.
+% 
+% Third, in the node addition and deletion, there is no load balance in our prototype.
+% Without load balance, after node added into the system, it needs a long time to achieve speed up.
+% Also in the node deletion, file write back and re-buffer are required.
+% 
+% In this paper, our aim is to validate effectiveness of burst buffers in
+% cloud.
+% Although we have these limitation in prototype, we can still show the effectiveness of burst
+% buffers.
