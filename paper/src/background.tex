@@ -29,8 +29,8 @@ Cloud computing majorly can be classified into following three kinds of models:
 \begin{enumerate}
   \item Infrastructure as a service (IaaS): cloud vendors provide only raw machines(physical or
   virtual machine), user need to set up the whole software environment including OS.
-  \item Platform as a service (PaaS): in this model, cloud vendors provide hardware as well as
-  software platform. Users can use it as a common computer and run applications on the platform.
+  \item Platform as a service (PaaS): in this model, cloud vendors provide
+  hardware as well as software platform. Users can use it as a common computer and run applications on the platform.
   Amazon EC2 provides PaaS.
   \item Software as a service (SaaS): Cloud vendors provide a certain applications. Users don't need
   to configure the software themselves.
@@ -145,7 +145,6 @@ However if we run data intensive workloads, which read and write a huge amount
 of data, the prolonged execution time can be unacceptable because of the low I/O
 throughput in cloud storage.
 \par
-\kento{will correct legend}
 Figure \ref{background:amazon s3 read write same file} shows I/O throughputs
 with different numbers of nodes which read or write to a single file, i.e.,
 $N-1$ I/O.
@@ -202,12 +201,11 @@ and find supernovae from the images in a CFITSIO data format \cite{fitsio}.
 
 \begin{figure}
 \centering
-\includegraphics[width=8cm]{img/data_locality.pdf}
+\includegraphics[width=8cm]{img/data_locality-2.pdf}
 \caption{Temporal I/O locality in data intensive applications}
 \label{background:data locality}
 \end{figure}
 
-\kento{In figure: povray $\to$ POV-Ray}
 %\kento{There is no topic sentence in this subse$ction. Why did you write this
 %subection ? why do you describe data access locality}
 % Since our proposal
@@ -239,11 +237,11 @@ and find supernovae from the images in a CFITSIO data format \cite{fitsio}.
 However, our analysis of data intensive workloads on HPC systems, we found that
 a number of applications have temporal I/O locality.
 To investigate temporal
-I/O locality of data intensive workloads we run several real data intensive
+I/O locality of data intensive workloads,  we run several real data intensive
 applications (in Table~\ref{background:work flow applications}) on our in-house
-system using MUSE \cite{MUSE}.
-With MUSE, we can trace all of the I/O operations (Details in Section \ref{}
-\kento{reference}) so that we can figure out temporal I/O locality of
+system using MUSE \cite{MUSE}. We devlopped MUSE to trace the all I/O
+operations, which include timestamp, pid, types of I/O operations, path to the access
+files, offset of file, and the size, so that we can figure out temporal I/O locality of
  data intensive applications from the traced I/O pattern.
 Figure \ref{background:data locality} shows the temporal I/O locality in
 the different data intensive applications assuming the buffer size is
