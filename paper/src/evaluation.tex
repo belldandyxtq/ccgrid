@@ -141,8 +141,34 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
  In this section, we simulate the execution of the three applications shown in
  Table.~\ref{background:work flow applications} on our prototype system.
  Since the I/O from other compute nodes will affect the I/O throughput of one compute node,
- in order to simulate the execution of different number of compute node and find the throughput of
- one compute node.
+ in order to simulate the execution in a real environment, we use model shown in section
+ \ref{sec:modeling}.
+ In this simulation, we use 8 burst buffer nodes, as well as 8 compute nodes, and use \ref{} to get
+ the throughput achieve by one client with the affect of other 7 compute nodes.
+ In Figure~\ref{evaluation:simulation result montage} shows the simulation result of three real
+ applications on one compute node with 8 burst buffer nodes, and affected by other 7 compute nodes.
+ 
+ Figure~\ref{evaluation:simulation result montage} also shows a simulation result of the execution
+ of the three applications on one compute node on Amazon S3 without using burst buffer nodes, and
+ affected by other 7 compute nodes.
+ 
+ From Figure~\ref{evaluation:simulation result montage} we can see that Montage achieves a great
+ speed up by using our proposal system, however other two applications, POV-Ray and Supernovae only
+ achieve a little speed up.
+ The reason is can be found from Table~\ref{evaluation:application execution detail}.
+ From Table~\ref{evaluation:application execution detail}, we can see that Montage has a different
+ characteristic compared to other two applications.
+ Montage read and write a large amount of data, but compute only for a short time.
+ However when we look at other two applications, POV-Ray has a small I/O data size, but a long
+ computation time; Supernovae has the largest I/O data size, but the computation time is the longest
+ too.
+ 
+ As we mentioned before, our proposal system can burst applications which have a largest I/O data
+ size.
+ So Montage achieved a large speed up on our proposal system, on the contrary, POV-Ray has a heavy
+ computation but a small I/O size, so it can only achieved a small speed up.
+ In Supernovae case, although the I/O time is reduced by using our proposal system, compare to the
+ computation time, the speed up is still small.
 % First we make several assumptions:
 % \begin{itemize}
 %   \item Master distribute I/O data of applications over all I/O nodes evenly, and applications
@@ -172,14 +198,14 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
 % \end{equation}
 
 
-Figure.~\ref{evaluation:simulation throughput} shows the one compute node throughput with 8 I/O
-nodes for different number of compute nodes, since for buffered file, compute nodes can assess these
-files from I/O nodes, the read and write throughput are both equal to I/O nodes throughput.
-Since we buffer all the output data, there is only read case can access to unbuffered file which
-can only achieve a low throughput.
+%Figure.~\ref{evaluation:simulation throughput} shows the one compute node throughput with 8 I/O
+%nodes for different number of compute nodes, since for buffered file, compute nodes can assess
+% these files from I/O nodes, the read and write throughput are both equal to I/O nodes throughput.
+%Since we buffer all the output data, there is only read case can access to unbuffered file which
+%can only achieve a low throughput.
 
-Table~.\ref{evaluation:application execution detail} shows the execution detail of the three
-applications.
+%Table~.\ref{evaluation:application execution detail} shows the execution detail of the three
+%applications.
 
 
 % \begin{figure}
@@ -204,10 +230,10 @@ applications.
 % \label{evaluation:simulation result supernovae}
 % \end{figure}
 
-As we can see from Figure.~\ref{evaluation:simulation result montage},\ref{evaluation:simulation
-result pov ray},\ref{evaluation:simulation result supernovae}, by using our system, all three
-applications achieved a high improvement.
-Among them, Montage has the largest improvement since it I/O a lot but do not do much
-computation.
-On the contrary, Pov Ray has a heavy computation, and a small I/O size, and gets a small performance
-improvement by using our system.
+%As we can see from Figure.~\ref{evaluation:simulation result montage},\ref{evaluation:simulation
+%result pov ray},\ref{evaluation:simulation result supernovae}, by using our system, all three
+%%applications achieved a high improvement.
+%Among them, Montage has the largest improvement since it I/O a lot but do not do much
+%computation.
+%On the contrary, Pov Ray has a heavy computation, and a small I/O size, and gets a small
+% performance improvement by using our system.
