@@ -2,8 +2,8 @@
 \section{Background and Motivation}
 \label{sec:background}
 If we execute data intensive workloads in clouds, the performance is
-expected to be unacceptable because I/O performance of shared storage in clouds
-are fairly slow (in Section \ref{ssec:IO_performance_in_clouds}). 
+expected to be unacceptable because I/O performance of shared storage in
+clouds are fairly slow (in Section \ref{ssec:IO_performance_in_clouds}). 
 However, our analysis of data intensive workloads on HPC systems, we found
 that a number of applications have temporal I/O locality (in Section
 \ref{ssec:data_access_locality}). These I/O workloads can be accelerated even on
@@ -123,15 +123,16 @@ Cloud computing can have following benefits:
 
 \begin{figure}[t]
 \centering
-\label{background:amazon s3 read write same file}
+
 \includegraphics[width=8cm]{img/s3_read_same_file-2}
 \caption{Amazon S3 read/write (N-1)}
+\label{background:amazon s3 read write same file}
 \end{figure}
 
 \begin{figure}[t]
-\label{background:amazon s3 read write different file}
 \includegraphics[width=8cm]{img/s3_read_write_different_file-2}
 \caption{Amazon S3 I/O throughput (N-N)}
+\label{background:amazon s3 read write different file}
 \end{figure}
 
 
@@ -145,13 +146,13 @@ throughput in cloud storage.
 \par
 Figure \ref{background:amazon s3 read write same file} shows I/O throughputs
 with different numbers of nodes which read or write to a single file, i.e.,
-$N-1$ I/O.
+N-1 I/O.
 As shown, the I/O throughputs are only 150 MB/s even in the best case of read,
 which degrades performance of data intensive workloads. 
 Figure \ref{background:amazon s3 read write different file} shows I/O
 throughputs with different numbers of nodes which read or write to their
-individual files, i.e., $N-N$ I/O. If each node read or write to their
-individual files, we see improvement in scalability compared to $N-1$ I/O. 
+individual files, i.e., N-N I/O. If each node read or write to their
+individual files, we see improvement in scalability compared to N-1 I/O. 
 However, the improvement is limited. Especially, write performance does not
 scale to the number of nodes. From the figures, we also see that the I/O
 performance is fairly unstable. Because typical data intensive applications consist of

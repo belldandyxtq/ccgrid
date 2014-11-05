@@ -18,7 +18,8 @@ applications run. \emph{Burst buffers} are provided by the same instances
 as \emph{compute nodes}. Unlike \emph{compute nodes}, The instances
 of the \emph{burst buffers} provide remote memory buffers for data caching.
 When the applications read or write data, the I/O operations are handled via
-\emph{burst buffers}.  The \emph{shared cloud storage} is persistent shared storage such as Amazon S3.
+\emph{burst buffers}.  The \emph{shared cloud storage} is persistent shared
+storage such as Amazon S3.
 Because the applications read or write all data via the burst buffers, the
 the caching operations under burst buffers is agnostic to the applications.
 Hence, the applications can benefit from the two-level of storage hierarchy
@@ -126,26 +127,33 @@ chunk so that modified chunk can be written back to storage.
 
 
 \subsection{Master Node}
-In our master-worker node model, master node is the supervisor of the entire system,
-master node is in charge of interactive with client, make file chunk placement, and handle file operations including file open, read and write.
-Master node also manages the burst buffer nodes and schedule events like node registration at node
-setup phase, addition and deletion.
-In order to master node majorly maintains following two data structures:
+In our master-worker node model, master node is the supervisor of the entire
+system. 
+The master node is in charge of handling clients' I/O requests, determining file
+chunk placements, and executing file operations including file open, read
+and write to burst buffer nodes.
+Master node also manages burst buffer node information for addition and deletion
+of burst buffer nodes to and from the system
+Mainly, the master node maintains following two data structures:
 \begin{itemize}
-  \item burst buffer nodes information: including node IP address, total memory and
-  available memory. 
-  \item File meta data: including file path, file id, total file size, access control, chunk size,
-  dirty flag and a map from chunks to burst buffer nodes.
+  \item Burst buffer nodes information, such as each IP address of burst buffer
+  nodes, and available memory sizes.; 
+  \item Metadata, such as file pathes, file identifiers, total file size, access
+  control, chunk size, dirty flag and a mapping table to locate chunks
+  distributed across burst buffer nodes.
 \end{itemize}
 
-Since only master has the global knowledge of file chunk placement, client must connect to master
-to get these information.
-However, in such master-worker model, master is easy to become a bottleneck of the whole system,
-thus we have to minimize the master involvement in file operation, client asks master about the
-file meta data, including the chunk placement information, then client uses these information and
-connect to burst buffer nodes directly for sending or receiving data.
+% Since only master has the global knowledge of file chunk placements, compute
+% nodes must connect to the master node to get these information when issuing I/O
+% operations. To avoid a performance bottleneck in the master node, we minimize
+% involvement of the master node to I/O operations. In our prototype system,
+% % However, in such master-worker
+% %model, master is easy to become a bottleneck of the whole system, thus we have
+% %to minimize the master involvement in file operation, 
+% client asks master about the file meta data, including the chunk placement
+% information, then client uses these information and connect to burst buffer nodes directly for sending or receiving data.
 
-\subsection{Client daemon}
+\subsection{Client Daemon}
 
 \begin{figure}[tb]
 	\centering
@@ -154,22 +162,32 @@ connect to burst buffer nodes directly for sending or receiving data.
 	\label{implementaion:client_daemon}
 \end{figure}
 
-In each compute node, there is a client daemon, which is a file system client used to buffer I/O
-data, communicate with master nodes and burst buffer nodes, including send I/O request and send or
-receive I/O data.
-Figure.~\ref{implementaion:client_daemon} is an illustration of client daemon inside client nodes
-and buffer queue in I/O burst nodes.
-Applications changes data with client daemon by using mmap.Figure.~\ref{implementaion:client_daemon}
-is an illustration of client daemon inside client nodes and buffer queue in burst buffer nodes.
-Users don't know and should not know the information like IP address of master nodes,  client daemon
-is used to hide these information from users.
-By using client daemon, application doesn't need to change their code, just recompile with a
-library.
-As figure.~\ref{implementaion:client_daemon} shows, client daemon send open, close request to master
-node, and cache the file information including file chunk size, a map to burst buffer nodes.
-When applications send read and write request, daemon send the request to corresponding burst buffer nodes
-according to the cached information from master node, and transfer data with burst buffer nodes, finally
-send to applications.
+On each compute node, a client daemon runs as an interface to the burst buffer
+nodes. The client daemon communicates to the master node and the burst buffer
+nodes to send I/O request, then send and receive I/O data for write and read
+via a TCP socket.
+Figure~\ref{implementaion:client_daemon} illustrate how client daemon interacti
+with the master node, and the burst buffer to complete read and write
+operations. All of the I/O operations are completed via the client daemon, the
+underlying processes are agnostic to applications. 
+% exchanges data with client
+% daemon by using \emph{mmap}.
+% Users don't know and should not know the information like IP address of master nodes,  client daemon
+% is used to hide these information from users.
+% By using client daemon, application doesn't need to change their code, just recompile with a
+% library.
+After receiving open requests from applications, 
+the client daemon sends the requests to the master node to receive metadata
+including each file chunk size for each burst buffer nodes, and a mapping table
+to chunk locations on each burst buffer nodes in which the file is need to be
+read or written.
+When applications issue read and write requests, the client daemon sends the
+request to corresponding burst buffer nodes according to the metadata, 
+and transfers file chunks from or to the burst buffer nodes. After
+completing the data transfer, the client daemon replay the
+acknowledgement.
+Data exchange between an application and the client daemon is done through
+\emph{mmap}.
 
 %When a user application issue a write request, I/O data will be buffered in that node by client
 %daemon, when user close the file, call flush function or I/O data size exceed I/O server buffer
@@ -195,32 +213,49 @@ send to applications.
 \label{implementation:file operation}
 \end{figure}
 
-In this section we give more details about the file operation in our implementation, including
-open, close, read and write.
+In this section, we give more details about the file operations in our
+implementation of open, close, read and write (Figure
+\ref{implementation:file operation}).
 
-When an application open a file, client daemon first send file path, access mode to master,
-master return the file id,
-for unbuffered file, master record the file information, and assign a file id, and then send the
-file id to client daemon.
+When an application opens a file to read, the client daemon first sends the file
+path, and the access mode to master nodes, then the master node tries to
+identify the file. If the file is in burst buffers, the master node replay to the client
+daemon with the metadata identifying identifying the locations of each file
+chunk on the burst buffer nodes
+Using the metadata, the client daemon directly access to each chunk of
+the files to read the file.
+If the file is not in burst buffers, the master node get the file size from
+shared cloud storage, and assign burst buffer nodes for the chunk
+locations according to file size. After that,
+The master node connects to the assigned burst buffer nodes, and sends
+requests to allocate memory space for the chunks, and then requests the assigned
+burst buffer nodes to read the their chunks of the file from shared cloud storage. After
+that, the master node sends metadata identifying the location of the
+chunks on the burst buffer nodes to the client daemon, so that the client daemon
+can directly read the chunks from each burst buffer nodes.
 
-After file opened, applications can use file id to send read or write request.
-In our prototype, since the master need to manage the chunk allocate and de-allocate operation, all
-the read, write request should send to master.
-When master receive the request, for file opened for reading
-request for the first time, master get the file size from shared storage, and assign several burst
-buffer nodes to this file according to file size and then send a map from chunks to burst buffer
-node to client daemon, after that, master connects to corresponding burst buffer nodes, send allocate chunk request and
-let burst buffer nodes read data from shared storage.
-As for file opened in only writing since the file need to be create, master get file size from
-client daemon and assign burst buffer nodes after that master send burst buffer nodes IP address as well as the map
-information from chunks to burst buffer nodes to client daemon, then master connects to
-corresponding burst buffer nodes, send allocate chunk request.
 
-After receiving the map from chunks to burst buffer nodes, client daemon connect to each burst
-buffer nodes in the map, and start I/O with these burst buffer nodes.
+% As for file opened in only writing since the file need to be create, master get file size from
+% client daemon and assign burst buffer nodes after that master send burst buffer nodes IP address as well as the map
+% information from chunks to burst buffer nodes to client daemon, then master connects to
+% corresponding burst buffer nodes, send allocate chunk request.
+% After receiving the map from chunks to burst buffer nodes, client daemon connect to each burst
+% buffer nodes in the map, and start I/O with these burst buffer nodes.
+When applications open a file to write, the client daemon sends the request to
+the master node.
+The master node gets the file size from the client daemon, and assigns the burst
+buffer nodes. Then, the master nodes sends requests the assigned burst buffer
+nodes for memory allocation. After that, the master node send metadata to
+the client daemon. The metadata includes information with which the client daemon can identify the
+location of the chunks to write on each assigned burst buffer nodes, 
+so that the client daemon can directly write the chunks from each burst buffer
+nodes. 
 
-In order to monitor workload of each burst buffer nodes, and make load balanced, burst buffer nodes send a signal to
-master at the start and the end of each data transfer.
+Because the master node need to manage the chunk allocate and
+de-allocate operations, all the read, write requests are initiated through the
+master node. In addition, the master node monitors workloads of each burst
+buffer nodes so that the master node can balance the workloads across all the
+burst buffer nodes.
 
 % \subsection{Limitation}
 % 

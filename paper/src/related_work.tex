@@ -1,44 +1,53 @@
 \section{related work}
 \label{sec:related work}
 
-Burst buffer architecture are used in several previous research, as a new design in storage system
-to fill the gap between compute node throughput and parallel file system throughput.
-Liu et al. \cite{on_the_role_of_burst_buffers} proposed burst buffers in
-high performance(HPC) system to absorb bursty I/O request from applications, they analyzed the I/O
-pattern of several applications, and the workload of the whole system, and propose a SSD based burst
-buffer system to absorb such bursty I/O request instead of traditional approach which increase the
-throughput of the file system and easily cause the under utilization.
-Sato et al.\cite{checkpointing} proposed a burst buffer based checkpoint
-strategy to enable timely checkpoint as well as alleviate the affect to applications.
+Burst buffer is used in several previous researches as a new design in storage
+system to fill the performance gap between node-local storage throghput and
+parallel file system throughput.
+Liu et al. \cite{on_the_role_of_burst_buffers} first proposed burst buffers for
+high performance systems to absorb bursty I/O request from applications. 
+They analyzed the I/O patterns of several applications, and the workload of the
+whole system, and delivered the effectiveness.
+Sato et al.\cite{checkpointing} explored effectiveness of burst buffers in
+checkpointing, and proposed checkpoint strategy for burst buffers.
 
-The emergence of Cloud Computing technology bring a new solution to large scale computation for it's
-economies of scale, low capital costs, high accessibility and flexibility.
-There are already many research used public cloud for a large scale computation.
-Shao et al.\cite{Geoprocessing_on_the_Amazon_cloud_computing_platform} showed a
-way to use Amazon public cloud for geoprocessing.
-Garcia et al.\cite{Analysis_of_Big_Data_Technologies_and_Method} run hadoop and
-open source parsers on Amazon cloud for querying large web public RDF datasets.
+The emergence of a cloud computing technology brings a new solution to large
+scale high performance computing with low initial costs, high accessibility and flexibility.
+There are already several researches using public clouds for a large scale
+computation.
+Shao et al.\cite{Geoprocessing_on_the_Amazon_cloud_computing_platform} presented
+that use of Amazone EC2 drives geoprocessing innovations.
+Garcia et al.\cite{Analysis_of_Big_Data_Technologies_and_Method} deployed
+\emph{Hadoop} on Amazon EC2 for querying large web public datasets.
 Wittek et al.\cite{XML_Processing_in_the_Cloud} combined an
 implementation-independent workflow designer with cloud computing to support small institution in ad-hoc
 peak computing needs.
-Richard Anthony et
+Anthony et
 al.\cite{Cloud_computing_applications_for_large-scale_satellite_ground_systems}
 discussed the applicability of cloud computing to large-scale satellite ground systems.
-However these work only focus on how to run these large scale application on cloud, they didn't
-consider the way to increase I/O throughput to shared storage.
+However, these work only focus on how to run these large scale application on
+cloud, they didn't consider the way to increase I/O throughput to shared
+cloud storage.
 
-I/O throughput problem is a critical part in cloud computing, and many work are focus on this
-topic.
+I/O throughput problem is a critical part in cloud computing, and many works
+have been focusing on this problem.
 Gupta et al.\cite{Towards_Efficient_Mapping} tried to improve the
-execution of HPC application in cloud by making a cloud-aware scheduler, and change the cloud environment
-dynamically to improve the overall performance.
+execution of HPC applications in clouds by using a proposed cloud-aware
+scheduler for dynamically changing cloud environment to improve the overall
+I/O performance.
 Hovestadt et al.\cite{Evaluating_Adaptive_Compression} considered another way to
 improve the I/O performance.
-They propose a new adaptive compression scheme for virtualized environments, and improve the I/O
-performance by compress the I/O data.
+They proposed a new adaptive compression scheme for virtualized environments,
+and improved the I/O performance by compressing the I/O data.
 Hongtao Du et
 al.\cite{DHFS:_A_High-Throughput_Heterogeneous_File_System_Based_on_Mainframe_for_Cloud_Storage}
-focused on the performance of metadata server in cloud environment and propose a high throughput system for Cloud Storage, by building metadata server on the high performance mainframe.
-They also focused on the security part of the shared storage in cloud, and propose a
-high-throughput parallel file for secure Cloud Storage base on a new concurrent write
-mechanism\cite{PsFS:_A_high-throughput_parallel_file_system_for_secure_Cloud_Storage_system}.
+focused on the performance of metadata server in cloud environments. They
+proposed a high throughput system for cloud Storage by building metadata server on the high performance mainframe.
+%They also focused on the security part of the shared storage in clouds, and
+%proposed a high-throughput parallel file system for secure cloud storage base
+% on a new concurrent write mechanism\cite{PsFS:_A_high-throughput_parallel_file_system_for_secure_Cloud_Storage_system}.
+
+Meanwhile, we innovate the state-of-the-art burst buffer technology for clouds
+to accelerate I/O performance. To the best our knowledge, this work is the first explorations
+of innovating burst buffer technologies in order to solve low I/O throughput
+problems in clouds.

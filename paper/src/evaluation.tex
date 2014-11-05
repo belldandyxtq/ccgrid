@@ -51,7 +51,7 @@ and a single ECU~(Amazon EC2 Compute Unit) provides the equivalent CPU capacity
 of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor \cite{AMAZON_AWS}.
 For the shared cloud storage, we use Amazon S3 mounted by sshfs\cite{sshfs}.
 
-\subsection{I/O Performance of A single compute node}
+\subsection{I/O Performance of A Single Compute Node}
 
 \begin{figure}
 \centering
@@ -96,8 +96,8 @@ data for a client.
 
 First we see the result of traditional I/O in which all compute nodes
 accesses to S3 concurrently.
-However, since the bandwidth of shared storage is is limited, the overall
-throughput does not scale well. On the other hands, our system is fairly
+However, since the bandwidth of the shared cloud storage is limited, the
+overall throughput does not scale well. On the other hands, our system is fairly
 scalable because the total bandwidth grows as the burst buffer nodes increase.
 %  Then, we found thatng our system.
 % Since all the data are stored on the shared storage, and need to
@@ -105,7 +105,7 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
 % However when we look at the write throughput, it shows a strong scalability, and achieved 7 times
 % improvement with only 4 I/O nodes.
 
-\subsection{Simulation for Real applications}
+\subsection{Simulation of Real Applications}
 
 
 \begin{table}

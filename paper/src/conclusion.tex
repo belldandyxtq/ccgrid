@@ -1,18 +1,19 @@
 %to do
 \section{conclusion and future work}
 \label{sec:conclusion}
-In this paper, we propose a cloud based burst buffer system to burst the I/O throughput in cloud.
-We implement a prototype of our proposal system, and evaluate it on Amazon EC2/S3 public cloud.
-We achieve an up to 3 times speed up for a single user in reading, as well as 4 times speed
-up for the whole system in writing.
-We also simulate the execution of three real data intensive applications on our proposal system in
-a real environment, and achieved up to 2.5 times speed up in the execution time
-of real application.
+In this paper, we have explored a cloud-based burst buffer system for clouds.
+To investigate the effectiveness of burst buffers in clouds,
+we have implement a prototype of our proposal system, and evaluate it on Amazon
+EC2/S3 public cloud.
+The experimental results show that we can achieve an up to 3 times speed up for
+read, and 4 times speed up for write.
+We have also conducted simulations targeting three real data
+intensive applications, and achieved 2.5 times speed up in the execution time
+of a real application, Montage, which has high temporal I/O locality and I/O
+time.
 
-However since this is a prototype of our proposal system, there are still many limitation in the
-system, may leading to under utilization of node bandwidth, and master node may easily become the
-bottleneck of the whole system.
-Also there are many points can be improved and can be added to the implementation, including the
-data layout of the burst buffer node in order to make load balance, and dynamic
-load balance in node addition and deletion.
-For the future work, we will try to improve our prototype.
+As future work, we will extend the system to be able to dynamically change the
+number of burst buffer nodes depending on the I/O workloads to achieve high I/O
+throughput while minimizing the costs.
+
+

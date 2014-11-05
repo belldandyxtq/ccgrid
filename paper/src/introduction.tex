@@ -49,9 +49,9 @@ scientific applications.
 However, if we execute \emph{data intensive workloads}, such as big data
 analysis and checkpointing for visualization or fault tolerance, on a cloud environment, the
 users suffer from the prolonged execution time and the cost because of the low
-throughput to shared storage and the data intensive workloads.
-For example, cloud-based shared storage, Amazon Simple Storage Service (Amazon
-S3), provides only a few hundreds MB/s of throughput because instances
+throughput to shared cloud storage and the data intensive workloads.
+For example, cloud-based shared cloud storage, Amazon Simple Storage Service
+(Amazon S3), provides only a few hundreds MB/s of throughput because instances
 in Amazon EC2 is connected to Amazon S3 via Internet.
 As demands for higher I/O throughput grow, 
 current cloud environments cannot provide enough I/O performance for 
@@ -72,7 +72,7 @@ Thus, improvement of I/O performance in clouds is critical to accelerate such
 % achieved a up to 4 times speed up on execution of data intensive applications from simulation.
 In order to solve the problem, we propose a cloud-based burst buffer system.
 Burst buffers have been proposed as a new tier of storage in the storage
-hierarchy in order to provide higher I/O throughput for shared storage by
+hierarchy in order to provide higher I/O throughput for shared cloud storage by
 absorbing bursty I/O requests from applications running on supercomputers
 \cite{on_the_role_of_burst_buffers}.
 Because most of HPC applications have data access
@@ -89,7 +89,9 @@ Our experimental results using Amazon EC2 shows that we achieve 3 times of
 improvement in read throughput, and 4 times in write throughput with 8 nodes of
 burst buffers. Our simulation based on the model shows that we can
 improve execution time of real data intensive applications by 2.5 times in
-execution time.
+execution time. To the best our knowledge, this work is the first explorations
+of innovating burst buffer technologies to clouds, and delivering quantitative
+evaluations.
 \par
 
 
