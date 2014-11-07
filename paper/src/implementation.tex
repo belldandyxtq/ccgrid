@@ -12,8 +12,8 @@
 \end{figure}
 
 Figure \ref{architecture:overview} shows an overview of our cloud-based
-burst buffer system, which consist of \emph{compute nodes}, \emph{burst buffers}
-and a \emph{shared cloud storage}. \emph{Compute nodes} are nodes on which
+burst buffer system, which consists of \emph{compute nodes}, \emph{burst
+buffers} and a \emph{shared cloud storage}. \emph{Compute nodes} are nodes on which
 applications run. \emph{Burst buffers} are provided by the same instances
 as \emph{compute nodes}. Unlike \emph{compute nodes}, The instances
 of the \emph{burst buffers} provide remote memory buffers for data caching.
@@ -64,7 +64,8 @@ without knowing the underlying operations.
 % both of master and burst buffer nodes have the same assess permission to the shared file system.
 
 In order to validate the effectiveness of the cloud-based burst buffer system in
-real environments, we implement a prototype of the system.In our design,
+real environments, we implement a prototype of the system.
+In our design,
 because the number of burst buffer nodes can be dynamically determined, a central management is required to manage when nodes are added and
 removed to re-balance the buffered data. In addition, buffered data is
 distributed across burst buffer nodes, metadata also needs to be managed by a
@@ -81,7 +82,7 @@ types of nodes:
 	\item Master node: A node managing burst buffer node information for adding and
 	removing, maintaining metadata of buffered data, and handling I/O requests
 	from compute nodes
-	\item Burst buffer node: nodes providing burst buffers using their
+	\item Burst buffer nodes: Nodes providing burst buffers using their
 	in-memory space
 	\item Client daemon: A process running on each compute node, and
 	reading or writing data from or to burst buffers based on metadata managed on
@@ -166,8 +167,8 @@ On each compute node, a client daemon runs as an interface to the burst buffer
 nodes. The client daemon communicates to the master node and the burst buffer
 nodes to send I/O request, then send and receive I/O data for write and read
 via a TCP socket.
-Figure~\ref{implementaion:client_daemon} illustrate how client daemon interacti
-with the master node, and the burst buffer to complete read and write
+Figure~\ref{implementaion:client_daemon} illustrates how the client daemon
+interacts with the master node, and the burst buffer to complete read and write
 operations. All of the I/O operations are completed via the client daemon, the
 underlying processes are agnostic to applications. 
 % exchanges data with client
@@ -220,8 +221,8 @@ implementation of open, close, read and write (Figure
 When an application opens a file to read, the client daemon first sends the file
 path, and the access mode to master nodes, then the master node tries to
 identify the file. If the file is in burst buffers, the master node replay to the client
-daemon with the metadata identifying identifying the locations of each file
-chunk on the burst buffer nodes
+daemon with the metadata identifying the locations of each file
+chunk on the burst buffer nodes.
 Using the metadata, the client daemon directly access to each chunk of
 the files to read the file.
 If the file is not in burst buffers, the master node get the file size from

@@ -10,8 +10,8 @@ buffers.
 
 In our model, we make two assumptions: 
 \begin{itemize}
-  \item The master node evenly distributes data of applications across burst
-  buffers nodes evenly so that I/O workloads are balanced across
+  \item The master node uniformly distributes applications' data across burst
+  buffers nodes so that I/O workloads are balanced across
   burst buffer nodes;
 %  \item All I/O data are evenly distributed over all I/O nodes.
 %  \item Applications access all data evenly.
@@ -51,7 +51,7 @@ important aspect is the cost.
 While I/O throughput can be accelerated by burst buffers, the cost can be
 increased because of additional nodes for burst buffers.
 To estimate the cost, we also model the cost of the cloud-based burst buffers
-based on the AMAZON EC2 cost model.
+based on the Amazon EC2 cost model.
 
 When we run an application using $\acute{n}$ number of compute nodes in a
 environment where $b$ number of burst buffers are used, the cost is charged for

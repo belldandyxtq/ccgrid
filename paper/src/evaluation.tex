@@ -49,7 +49,7 @@ interconnection network inside Amazon EC2 in the region.
 Here, vCPUs means the number of virtual CPUs in the instance, 
 and a single ECU~(Amazon EC2 Compute Unit) provides the equivalent CPU capacity
 of a 1.0-1.2GHz 2007 Opteron or 2007 Xeon processor \cite{AMAZON_AWS}.
-For the shared cloud storage, we use Amazon S3 mounted by sshfs\cite{sshfs}.
+For the shared cloud storage, we use Amazon S3 mounted by s3fs\cite{S3FS}.
 
 \subsection{I/O Performance of A Single Compute Node}
 
@@ -160,7 +160,7 @@ scalable because the total bandwidth grows as the burst buffer nodes increase.
  From Table~\ref{evaluation:application execution detail}, we can see that Montage has a different
  characteristic compared to the other two applications.
  As we mentioned before, our proposal system can burst applications which have a largest I/O data
- size, so Montage achieves a large speed up on our proposal system, up to 2.5
+ size, so Montage achieves a large speed up on our proposal system, up to 2.9
  times.
  On the contrary, POV-Ray has a heavy computation but a small I/O size, so it
  can only achieve a small speed up.
@@ -184,7 +184,7 @@ Figure \ref{evaluation:simulation result cost} shows the relative monetary cost
 for the execution when the cost of execution without burst buffers, $S3$, is 1.
 The estimated costs are computed based on our cost modes in Section
 \ref{ssec:cost_model}. As shown in the figure, for Montage, 
-we can achieve more that two times of saving of the monetary cost in addition to
+we can achieve more that 2 times of saving of the monetary cost in addition to
 the I/O performance. Although, the environment with burst buffers use twice
 numbers of the Amazone EC2 instances, i.e., additional 8 burst buffers to 8
 compute nodes, the execution is cost effective because the execution time can be

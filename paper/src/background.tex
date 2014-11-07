@@ -159,8 +159,8 @@ performance is fairly unstable. Because typical data intensive applications cons
 processes which have dependency each other, prolonged I/O
 operation due to the instability can propagate, and degrades the overall
 performance \cite{montage, povray}.
-There problems are also reported in existing studies \cite{Chiba,Transactions_a_la_carte, Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids,
-anevaluation}. 
+These problems are also reported in several existing studies
+ \cite{Chiba,Transactions_a_la_carte, Interactive_Use_of_Cloud_Services,Amazon_S3_for_Science_Grids, anevaluation}. 
 Thus, new technology is required to achieve higher and more stable I/O
 performance.
 
@@ -247,7 +247,7 @@ the different data intensive applications assuming the buffer size is
 enough to accommodate the intermediate data.
 %\kento{Will change Y. in the figure} 
 The buffered I/O ratio, $R_{buf}$, means
-ratio of read and write operations, which can read from or writ to the buffer.
+ratio of read and write operations, which can read from or write to the buffer.
 The ratio can be formulated as:
 \begin{equation}
 R_{buf} = \frac{r_{b} + w_{b}}{r_{t} + w_{t}} \\
@@ -256,7 +256,7 @@ where $r_{b}$, $w_{b}$ denote total read and write size, and $r_{b}$, $w_{b}$
 denote size of reading and writing from the buffer. 
 As in the figure, we can see that the I/O patterns of the three applications
 shows high buffered I/O rations. For example, The rations of Montage and POV-Ray
-are over 95\%, and the ration of supernovae is over 80\%.
+are over 95\%, and the ration of Supernovae is over 80\%.
 Because we assume enough size of the buffer size, all write operations data can
 be buffered, i.e., $w_{b} = w_{t}$.
 %\kento{XU: Is this correct ?}
@@ -326,7 +326,7 @@ As mentioned in Section \ref{ssec:data_access_locality},
 a number of data intensive workloads have temporal I/O locality, and their I/O
 data can be buffered.
 If we can install \emph{large}, \emph{fast} and \emph{shared} buffer space, we
-can accelerate these data intensive worklodas.
+can accelerate these data intensive workloads.
 Motivate by the fact, we innovate the \emph{burst buffer} technology to cloud
 environments.
 Burst buffer is a new tier in current storage hierarchy for bursty I/O operation
